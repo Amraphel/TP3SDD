@@ -37,10 +37,13 @@ int lirePref_fromFileName(char * fileName, int nbEltsPref , eltPrefPostFixee_t* 
  * @param [in] val la valeur du point
  * @return l'adresse du nouveau point 
  */
-// allocPoint()
-// {
-// // TO DO
-// }
+cell_lvlh_t* allocPoint(int v)
+{
+    cell_lvlh_t* nouv = malloc(sizeof(cell_lvlh_t));
+    nouv->val = v;
+    nouv->lv = nouv->lh = NULL;
+    return nouv;
+}
 
 /** TO DO
  * @brief construire un arbre avec lvlh a partir de representation prefixee
@@ -50,9 +53,10 @@ int lirePref_fromFileName(char * fileName, int nbEltsPref , eltPrefPostFixee_t* 
  *     - NULL si l'arbre resultatnt est vide
  *     - l'adresse de la racine de l'arbre sinon
 */
-//  pref2lvlh()
+// int* pref2lvlh(int* a0)
 // {
-// // TO DO
+
+
 // }
 
 /** TO DO
