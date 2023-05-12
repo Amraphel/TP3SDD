@@ -16,10 +16,10 @@
  * @param [in, out] nbEltsPref l'adresse memoire contenant le nombre des elements du tabEltPref
  * @return le nombre de racines
  */
-//  lirePref_fromFileName()
-// {
-// // TO DO
-// }
+int lirePref_fromFileName(char * fileName, int nbEltsPref , eltPrefPostFixee_t* nbEltsPref)
+{
+    
+}
 
 /** TO DO
  * @brief afficher les elements de la representation prefixee sur un flux de sortie

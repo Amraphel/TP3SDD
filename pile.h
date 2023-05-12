@@ -6,7 +6,7 @@
 #ifndef __PILE_H__
 #define __PILE_H__
 
-#include "eltType.h"
+#include "eltPile.h"
 
 /**
  * @brief taille de la pile (au cas ou)

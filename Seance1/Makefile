@@ -3,15 +3,15 @@ CFLAGS = -Wall -Wextra -g
 LDFLAGS =
 
 #repertoire des fichiers d'unitests teZZt.[ch]
-DIRUTEST = ../../
+DIRUTEST = ../
 
 #repertoire des fichiers communs : eltPile.[ch], eltsArbre.h pile.[ch]
 DIRCOMM = ../
 
 #liste des fichiers source
-SRC = $(wildcard $(DIRCOMM)*.c *.c) $(DIRUTEST)teZZt.c
+SRC = $(wildcard $(DIRCOMM)*.c *.c) 
 
-HEADERS = $(wildcard $(DIRCOMM)*.h *.h) $(DIRUTEST)teZZt.h
+HEADERS = $(wildcard $(DIRCOMM)*.h *.h) 
 
 #liste des fichiers objets
 OBJ = $(SRC:%.c=%.o)
