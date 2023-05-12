@@ -10,7 +10,7 @@
  * @brief definir le nombre d'elements (couple valeur-nombre_de_fils) maximum 
  *        dans une representation prefixee ou postfixee
  */
-// TO DO
+#define NB_ELTPREF_MAX 5
 
 /** TO DO
  * @struct eltPrefPostFixee_t
@@ -19,7 +19,10 @@
  *   - val : la valeur d'un element de type char
  *   - nbFils : le nombre de fils d'un element
  */
-// TO DO
+typedef struct eltPrefPostFixee {
+    char val;
+    int nbFils;
+} eltPrefPostFixee_t;
 
 /** TO DO
  * @struct cell_lvlh_t
@@ -29,7 +32,11 @@
  *   - lv : pointeur pour le lien vertical
  *   - lh : pointeur pour le lien horizontal
  */
-// TO DO
+typedef struct cell_lvlh{
+    char val;
+    struct cell_lvlh* lv;
+    struct cell_lvlh* lh;
+} cell_lvlh_t;
 
 
 #endif

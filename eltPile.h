@@ -15,7 +15,11 @@
  *   - adrPrec : l'adresse du pointeur prec du point
  *   - nbFils_ou_Freres : le nombre de fils ou freres d'un point 
  */
-// TO DO
+typedef struct eltype {
+    cell_lvlh_t * adrCell;
+    struct eltype* adrPrc:;
+    int nbFils_ou_Freres;
+} eltType;
 
 
 /** TO DO
@@ -23,6 +27,6 @@
  * @param [in] xxx l'adresse de l'element a copier
  * @param [in] xxx l'adresse de la destination
  */
-// copyElt();
+void copyElt(eltType* source, eltType* dest);
 
 #endif
