@@ -37,22 +37,15 @@
  * @param [in] val la valeur du point
  * @return l'adresse du nouveau point 
  */
-cell_lvlh_t* allocPoint(char v)
+cell_lvlh_t *allocPoint(char val)
 {
-<<<<<<< HEAD
-    cell_lvlh_t* nouv = (cell_lvlh_t)malloc(sizeof(cell_lvlh_t));
+    cell_lvlh_t *nouv = (cell_lvlh_t*)malloc(sizeof(cell_lvlh_t));
     if(nouv)
     {
-        nouv->val = v;
-        nouv->lv = NULL
+        nouv->val = val;
+        nouv->lv = NULL;
         nouv->lh = NULL;
     }
-=======
-    cell_lvlh_t* nouv = (cell_lvlh_t*) malloc(sizeof(cell_lvlh_t));
-    nouv->val = v;
-    nouv->lv = NULL;
-    nouv->lh = NULL;
->>>>>>> 5ed06822d68a6ecc36dcf09363bbde4ee85309e1
     return nouv;
 }
 

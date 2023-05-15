@@ -29,7 +29,7 @@
  * @param [in] val la valeur du point de type char
  * @return l'adresse du nouveau point 
  */
-cell_lvlh_t* allocPoint(int v);
+cell_lvlh_t *allocPoint(char val);
 
 /**
  * @brief construire un arbre avec lvlh a partir de representation prefixee
