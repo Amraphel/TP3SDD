@@ -39,9 +39,13 @@ int lirePref_fromFileName(char * fileName, int nbEltsPref , eltPrefPostFixee_t* 
  */
 cell_lvlh_t* allocPoint(int v)
 {
-    cell_lvlh_t* nouv = malloc(sizeof(cell_lvlh_t));
-    nouv->val = v;
-    nouv->lv = nouv->lh = NULL;
+    cell_lvlh_t* nouv = (cell_lvlh_t)malloc(sizeof(cell_lvlh_t));
+    if(nouv)
+    {
+        nouv->val = v;
+        nouv->lv = NULL
+        nouv->lh = NULL;
+    }
     return nouv;
 }
 
