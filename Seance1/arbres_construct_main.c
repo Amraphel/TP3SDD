@@ -8,7 +8,7 @@
 #include "../pile.h"
 #include "../eltsArbre.h"
 #include "arbres_construct.h"
-#include "../../teZZt.h"
+#include "../teZZt.h"
 
 
 BEGIN_TEST_GROUP(ARBRE_CONSTRUCT)

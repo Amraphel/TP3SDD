@@ -17,7 +17,7 @@
  */
 typedef struct eltype {
     cell_lvlh_t * adrCell;
-    struct eltype* adrPrc:;
+    struct eltype* adrPrec;
     int nbFils_ou_Freres;
 } eltType;
 

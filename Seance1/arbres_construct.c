@@ -16,10 +16,10 @@
  * @param [in, out] nbEltsPref l'adresse memoire contenant le nombre des elements du tabEltPref
  * @return le nombre de racines
  */
-int lirePref_fromFileName(char * fileName, int nbEltsPref , eltPrefPostFixee_t* nbEltsPref)
-{
-    
-}
+// int lirePref_fromFileName(char * fileName, int tabEltPref , eltPrefPostFixee_t* nbEltsPref)
+// {
+
+// }
 
 /** TO DO
  * @brief afficher les elements de la representation prefixee sur un flux de sortie
@@ -37,8 +37,9 @@ int lirePref_fromFileName(char * fileName, int nbEltsPref , eltPrefPostFixee_t* 
  * @param [in] val la valeur du point
  * @return l'adresse du nouveau point 
  */
-cell_lvlh_t* allocPoint(int v)
+cell_lvlh_t* allocPoint(char v)
 {
+<<<<<<< HEAD
     cell_lvlh_t* nouv = (cell_lvlh_t)malloc(sizeof(cell_lvlh_t));
     if(nouv)
     {
@@ -46,6 +47,12 @@ cell_lvlh_t* allocPoint(int v)
         nouv->lv = NULL
         nouv->lh = NULL;
     }
+=======
+    cell_lvlh_t* nouv = (cell_lvlh_t*) malloc(sizeof(cell_lvlh_t));
+    nouv->val = v;
+    nouv->lv = NULL;
+    nouv->lh = NULL;
+>>>>>>> 5ed06822d68a6ecc36dcf09363bbde4ee85309e1
     return nouv;
 }
 
