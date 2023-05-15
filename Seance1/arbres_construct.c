@@ -45,6 +45,7 @@ cell_lvlh_t *allocPoint(char val)
         nouv->val = val;
         nouv->lv = NULL;
         nouv->lh = NULL;
+        //test
     }
     return nouv;
 }
