@@ -10,7 +10,7 @@
  * @brief definir le nombre d'elements (couple valeur-nombre_de_fils) maximum 
  *        dans une representation prefixee ou postfixee
  */
-#define NB_ELTPREF_MAX 5
+#define NB_ELTPREF_MAX 20
 
 /** TO DO
  * @struct eltPrefPostFixee_t

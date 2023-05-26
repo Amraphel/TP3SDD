@@ -25,7 +25,7 @@ TEST(nouvCell) {
 	free(new);
 }
 
-/*
+
 TEST(lirePref_fromFileName_exTP) {
 	int nbRacines = 0;
 	int nbEltsPref = 0;
@@ -64,7 +64,7 @@ TEST(printTabEltPref_exTP) {
 	printf("\033[0m\n");
 
 	nbRacines = lirePref_fromFileName("../pref_exTP.txt", tabEltPref, &nbEltsPref);
-	fprintf(file, "%d ", nbRacines);
+	fprintf(file, "%d", nbRacines);
 	printTabEltPref(file, tabEltPref, nbEltsPref);
 	fclose(file);
 	CHECK( 0 == strcmp(buffer, "2 (A,3) (B,2) (E,0) (J,0) (D,0) (H,1) (G,0) (C,2) (F,3) (K,0) (M,0) (T,0) (I,0)\n") ); 
@@ -88,7 +88,7 @@ TEST(pref2lvlh1_exTP) {
 
 	// TO DO
 }
-*/
+
 
 END_TEST_GROUP(ARBRE_CONSTRUCT)
 

@@ -14,7 +14,7 @@
  * @param [in, out] nbEltsPref l'adresse memoire contenant le nombre des elements du tabEltPref
  * @return le nombre de racines
  */
-// lirePref_fromFileName();
+int lirePref_fromFileName(char * fileName, eltPrefPostFixee_t* tabEltPref , int* nbEltsPref);
 
 /** TO DO
  * @brief afficher les elements de la representation prefixee sur un flux de sortie
@@ -22,7 +22,7 @@
  * @param [in, out] tabEltPref tableau des elements de la representation prefixee
  * @param [in, out] nbEltsPref le nombre des elements du tabEltPref
  */
-// printTabEltPref();
+void printTabEltPref(FILE *file, eltPrefPostFixee_t *tabEltPref, int nbEltsPref);
 
 /** TO DO
  * @brief creer et initialiser un nouveau point de l'arborescence

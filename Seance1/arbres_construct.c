@@ -16,10 +16,30 @@
  * @param [in, out] nbEltsPref l'adresse memoire contenant le nombre des elements du tabEltPref
  * @return le nombre de racines
  */
-// int lirePref_fromFileName(char * fileName, int tabEltPref , eltPrefPostFixee_t* nbEltsPref)
-// {
+int lirePref_fromFileName(char * fileName, eltPrefPostFixee_t* tabEltPref , int* nbEltsPref)
+{
+    int nbRacine = 0;
+    char c ;
+    
+    if(tabEltPref && nbEltsPref){
+        FILE * file = fopen(fileName, "r");
+        *nbEltsPref = 0;
 
-// }
+        if(file)
+        {
+            fscanf(file,"%d", &nbRacine);
+            c = fgetc(file);
+            while(c == ' ')
+            {  
+                fscanf(file, "%c %d", &tabEltPref[*nbEltsPref].val, &tabEltPref[*nbEltsPref].nbFils);
+                *nbEltsPref +=1;
+                c = fgetc(file);
+            }
+            fclose(file);
+        }
+    }
+    return nbRacine;
+}
 
 /** TO DO
  * @brief afficher les elements de la representation prefixee sur un flux de sortie
@@ -27,10 +47,15 @@
  * @param [in, out] tabEltPref tableau des elements de la representation prefixee
  * @param [in, out] nbEltsPref le nombre des elements du tabEltPref
  */
-// void printTabEltPref(FILE *file, eltPrefPostFixee_t *tabEltPref, int nbEltsPref)
-// {
-// // TO DO
-// }
+void printTabEltPref(FILE *file, eltPrefPostFixee_t *tabEltPref, int nbEltsPref)
+{
+    int ind;
+    for(ind=0; ind<nbEltsPref; ind++){
+        fprintf(file, " (%c,%d)", tabEltPref[ind].val, tabEltPref[ind].nbFils);
+    }
+    fprintf(file,"\n");
+
+}
 
 /** TO DO
  * @brief creer et initialiser un nouveau point de l'arborescence
@@ -39,7 +64,7 @@
  */
 cell_lvlh_t *allocPoint(char val)
 {
-    cell_lvlh_t *nouv = (cell_lvlh_t*)malloc(sizeof(cell_lvlh_t));
+    cell_lvlh_t *nouv = malloc(sizeof(cell_lvlh_t));
     if(nouv)
     {
         nouv->val = val;
