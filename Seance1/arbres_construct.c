@@ -83,11 +83,41 @@ cell_lvlh_t *allocPoint(char val)
  *     - NULL si l'arbre resultatnt est vide
  *     - l'adresse de la racine de l'arbre sinon
 */
-// int* pref2lvlh(int* a0)
-// {
+int* pref2lvlh(int* a0)
+{
+     cell_lvlh* nouv = NULL;
 
+    pile_t pile = initPile(PILE_SZ);
+    cell_lvlh_t* adrTete=NULL;
+    int* courLc=a0;
+    cell_lvlh_t* pprec=adrTete;
+    int NB_fils_ou_frere= *a0;
+    courLc+=1;
 
-// }
+    while (NB_fils_ou_frere>0 || !estVide(pile))
+    {
+        if(NB_fils_ou_frere>0){
+            nouv = allocPoint(*courLc);
+            pprec= nouv;
+            empiler(pile, NB_fils_ou_frere-1);
+            empiler(pile, nouv->lh);
+            pprec=nouv->lh;
+            NB_fils_ou_frere= *(courLc+2)
+            courLc= courLc->lh;
+
+        }else{
+            if(!estVide(pile)){
+                pprec=depiler(pile);
+                NB_fils_ou_frere=depiler(pile);
+            }
+        }
+    }
+
+    libererPile(pile)
+    return adrTete;
+    
+
+}
 
 /** TO DO
  * @brief liberer les blocs memoire d'un arbre
