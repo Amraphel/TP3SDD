@@ -86,7 +86,7 @@ TEST(pref2lvlh1_exTP) {
 
 	nbRacines = lirePref_fromFileName("../pref_exTP.txt", tabEltPref, &nbEltsPref);
 
-	// TO DO
+	// test
 }
 
 
