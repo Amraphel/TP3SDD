@@ -38,7 +38,25 @@ int getNbFils_ou_Freres( cell_lvlh_t * ptCell)
  * @param [in] file le flux de sortie
  * @param [in] racine la racine de l'arborescence
  */
-//  printPostfixee()
-// {
-// // TO DO
-// }
+void printPostfixee(FILE file, cell_lvlh_t * racine)
+{
+    cell_lvlh_t * cour = *racine;
+    pile_t* pile = initPile(taille);
+    while( cour != NULL)
+    {
+        while( cour->lv != NULL)
+        {
+            empiler(*pile, *cour, 0);
+            cour = cour->lv;
+        }
+        fprintf(file, "(%c, %d)", cour->val, cour->lv->val);
+        cour = *cour->lv;
+        while( cour != NULL)
+        {
+            cour = depiler(pile, cell_lvlh_t, 0);
+            fprintf(file, "(%c, %d)", cour->val, cour->lh->val);
+            cour = *cour->lh;
+        }
+    }
+    libererPile(pile);
+}
