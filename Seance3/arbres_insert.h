@@ -15,7 +15,7 @@
  *   - l'adresse du point contenant v si v existe dans l'arborescence
  *   - NULL, sinon
  */
-// rechercher_v();
+cell_lvlh_t * rechercher_v(cell_lvlh_t * racine, char v);
 
 /** TO DO
  * @brief rechercher le double prec de w dans une liste de fils
@@ -23,7 +23,7 @@
  * @param [in] w la valeur a inserer
  * @return l'adresse du pointeur prec apres lequel w doit etre inseree
  */
- // rechercherPrecFilsTries();
+cell_lvlh_t ** rechercherPrecFilsTries(cell_lvlh_t * adrpere, char w);
 
  /** TO DO
  * @brief inserer une valeur w dans les fils d'un point de valeur v
@@ -32,6 +32,6 @@
  * @param [in] w la valeur a inserer
  * @return 1 - insertion realisee; 0 - insertion n'a pas ete realisee
  */
-// insererTrie();
+int insererTrie(cell_lvlh_t * racine, char v, char w);
 
 #endif
