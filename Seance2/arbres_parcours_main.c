@@ -9,7 +9,7 @@
 #include "../eltsArbre.h"
 #include "../Seance1/arbres_construct.h"
 #include "arbres_parcours.h"
-#include "../../teZZt.h"
+#include "../teZZt.h"
 
 
 BEGIN_TEST_GROUP(ARBRE_PARCOURS)
