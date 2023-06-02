@@ -20,7 +20,7 @@
 cell_lvlh_t * rechercher_v(cell_lvlh_t * racine, char v)
 {
     cell_lvlh_t* cour = racine;
-    pile_t* pile = initPile(taille);
+    pile_t* pile = initPile(NB_ELTPREF_MAX);
     while(cour != NULL && cour->val != v)
     {
         empiler(pile, cour, 0);
