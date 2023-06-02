@@ -85,35 +85,46 @@ cell_lvlh_t *allocPoint(char val)
 */
 cell_lvlh_t* pref2lvlh(eltPrefPostFixee_t * tabEltPref,int* nbRacines)
 {
-     cell_lvlh* nouv = NULL;
-
-    pile_t pile = initPile(PILE_SZ);
-    cell_lvlh_t* adrTete=NULL;
+    int* code= NULL;
+    cell_lvlh_t* nouv = NULL;
+    eltType* eltPile = NULL;
+    pile_t * pile = initPile(PILE_SZ);
     eltPrefPostFixee_t * courLc=tabEltPref;
-    cell_lvlh_t* pprec=adrTete;
-    int NB_fils_ou_frere= *a0;
+    int NB_fils_ou_frere= *nbRacines;
     courLc+=1;
+    cell_lvlh_t* adrTete=allocPoint(courLc->val);
+    cell_lvlh_t* pprec=adrTete;
 
-    while (NB_fils_ou_frere>0 || !estVide(pile))
+    while (NB_fils_ou_frere>0 || !estVidePile(pile))
     {
         if(NB_fils_ou_frere>0){
-            nouv = allocPoint(*courLc->val);
-            pprec= nouv;
-            empiler(pile, NB_fils_ou_frere-1);
-            empiler(pile, nouv->lh);
-            pprec=nouv->lh;
-            NB_fils_ou_frere= *(courLc->nbFils)
+            fprintf(stderr, "%c dans fils\n", courLc->val);
+            nouv = allocPoint(courLc->val);
+            eltPile = malloc(sizeof(eltType));
+            eltPile->adrCell=nouv;
+            eltPile->adrPrec=pprec;
+            eltPile->nbFils_ou_Freres=NB_fils_ou_frere-1;
+            empiler(pile,eltPile, code);
+            pprec->lv=nouv;
+            pprec=nouv->lv;
+            NB_fils_ou_frere= (courLc->nbFils);
             courLc= courLc+1;
 
         }else{
-            if(!estVide(pile)){
-                pprec=depiler(pile);
-                NB_fils_ou_frere=depiler(pile);
+            if(!estVidePile(pile)){
+                fprintf(stderr, "%c dans frere\n", courLc->val);
+                depiler(pile,eltPile,code);
+                pprec=eltPile->adrPrec;
+                pprec->lh=eltPile->adrCell->lh;
+                pprec=pprec->lh;
+                NB_fils_ou_frere=eltPile->nbFils_ou_Freres;
             }
         }
     }
-
-    libererPile(pile)
+    libererPile(&pile);
+    free(eltPile->adrPrec);
+    free(eltPile->adrCell);
+    free(eltPile);
     return adrTete;
     
 

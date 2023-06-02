@@ -39,7 +39,7 @@ cell_lvlh_t *allocPoint(char val);
  *     - NULL si l'arbre resultatnt est vide
  *     - l'adresse de la racine de l'arbre sinon
 */
-// pref2lvlh();
+cell_lvlh_t* pref2lvlh(eltPrefPostFixee_t * tabEltPref,int* nbRacines);
 
 /** TO DO
  * @brief liberer les blocs memoire d'un arbre
