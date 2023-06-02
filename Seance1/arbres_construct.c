@@ -83,13 +83,13 @@ cell_lvlh_t *allocPoint(char val)
  *     - NULL si l'arbre resultatnt est vide
  *     - l'adresse de la racine de l'arbre sinon
 */
-int* pref2lvlh(int* a0)
+cell_lvlh_t* pref2lvlh(eltPrefPostFixee_t * tabEltPref,int* nbRacines)
 {
      cell_lvlh* nouv = NULL;
 
     pile_t pile = initPile(PILE_SZ);
     cell_lvlh_t* adrTete=NULL;
-    int* courLc=a0;
+    eltPrefPostFixee_t * courLc=tabEltPref;
     cell_lvlh_t* pprec=adrTete;
     int NB_fils_ou_frere= *a0;
     courLc+=1;
@@ -97,13 +97,13 @@ int* pref2lvlh(int* a0)
     while (NB_fils_ou_frere>0 || !estVide(pile))
     {
         if(NB_fils_ou_frere>0){
-            nouv = allocPoint(*courLc);
+            nouv = allocPoint(*courLc->val);
             pprec= nouv;
             empiler(pile, NB_fils_ou_frere-1);
             empiler(pile, nouv->lh);
             pprec=nouv->lh;
-            NB_fils_ou_frere= *(courLc+2)
-            courLc= courLc->lh;
+            NB_fils_ou_frere= *(courLc->nbFils)
+            courLc= courLc+1;
 
         }else{
             if(!estVide(pile)){
