@@ -20,6 +20,6 @@ int getNbFils_ou_Freres( cell_lvlh_t * ptCell);
  * @param [in] file le flux de sortie
  * @param [in] racine la racine de l'arborescence
  */
-void printPostfixee(FILE file, cell_lvlh_t * racine);
+void printPostfixee(FILE* file, cell_lvlh_t * racine);
 
 #endif
