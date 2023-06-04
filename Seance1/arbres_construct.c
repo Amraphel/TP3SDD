@@ -85,46 +85,59 @@ cell_lvlh_t *allocPoint(char val)
 */
 cell_lvlh_t* pref2lvlh(eltPrefPostFixee_t * tabEltPref,int* nbRacines)
 {
-    int* code= NULL;
+    int fun =0;
+
+    int* code= malloc(sizeof(int));
     cell_lvlh_t* nouv = NULL;
     eltType* eltPile = NULL;
     pile_t * pile = initPile(PILE_SZ);
     eltPrefPostFixee_t * courLc=tabEltPref;
+    cell_lvlh_t* adrTete=allocPoint(courLc->val);
+    cell_lvlh_t** pprec=&adrTete;
     int NB_fils_ou_frere= *nbRacines;
     courLc+=1;
-    cell_lvlh_t* adrTete=allocPoint(courLc->val);
-    cell_lvlh_t* pprec=adrTete;
 
     while (NB_fils_ou_frere>0 || !estVidePile(pile))
     {
+        fprintf(stderr,"Tour : %d\n", fun);
         if(NB_fils_ou_frere>0){
             fprintf(stderr, "%c dans fils\n", courLc->val);
+            fprintf(stderr, "pprec : %c dans fils\n", (*pprec)->val);
+            fprintf(stderr, "%d dans fils\n", NB_fils_ou_frere);
             nouv = allocPoint(courLc->val);
+            NB_fils_ou_frere= (courLc->nbFils);
             eltPile = malloc(sizeof(eltType));
             eltPile->adrCell=nouv;
-            eltPile->adrPrec=pprec;
+            eltPile->adrPrec=(*pprec);
             eltPile->nbFils_ou_Freres=NB_fils_ou_frere-1;
+
             empiler(pile,eltPile, code);
-            pprec->lv=nouv;
-            pprec=nouv->lv;
-            NB_fils_ou_frere= (courLc->nbFils);
+            (*pprec)->lv=nouv;
+            (*pprec)=nouv;
+           
             courLc= courLc+1;
 
         }else{
             if(!estVidePile(pile)){
                 fprintf(stderr, "%c dans frere\n", courLc->val);
+
                 depiler(pile,eltPile,code);
-                pprec=eltPile->adrPrec;
-                pprec->lh=eltPile->adrCell->lh;
-                pprec=pprec->lh;
+                (*pprec)=eltPile->adrCell;
+                fprintf(stderr, "pprec : %c dans frere\n", (*pprec)->val);
+                // fprintf(stderr, "pprec : %c dans frere\n", pprec->val);
+                // fprintf(stderr, "adrC : %c dans frere\n", eltPile->adrCell->val);
+                nouv = allocPoint(courLc->val);
+                (*pprec)->lh=nouv;
                 NB_fils_ou_frere=eltPile->nbFils_ou_Freres;
+                courLc= courLc+1;
             }
         }
+        fun++;
     }
     libererPile(&pile);
-    free(eltPile->adrPrec);
-    free(eltPile->adrCell);
-    free(eltPile);
+    // free(eltPile->adrPrec);
+    // free(eltPile->adrCell);
+    // free(eltPile);
     return adrTete;
     
 
