@@ -87,7 +87,7 @@ TEST(pref2lvlh1_exTP) {
 	nbRacines = lirePref_fromFileName("../pref_exTP.txt", tabEltPref, &nbEltsPref);
 
 	racine=pref2lvlh(tabEltPref,&nbRacines);
-	printf("%c\n",racine->lv->val);
+	printf("val: %c fin\n",racine->val);
 	CHECK( 'A' == racine->val ); 
 }
 
