@@ -8,6 +8,7 @@
 #include "../pile.h"
 #include "../eltsArbre.h"
 #include "arbres_insert.h"
+#include "../Seance2/arbres_parcours.h"
 
 
 /**
@@ -20,14 +21,19 @@
 cell_lvlh_t * rechercher_v(cell_lvlh_t * racine, char v)
 {
     cell_lvlh_t* cour = racine;
+    eltType* eltPile;
     pile_t* pile = initPile(NB_ELTPREF_MAX);
     while(cour != NULL && cour->val != v)
     {
-        empiler(pile, cour, 0);
+        eltPile->adrCell= cour;
+        eltPile->adrPrec = NULL;
+        eltPile->nbFils_ou_Freres= getNbFils_ou_Freres(cour);
+        empiler(pile, eltPile, 0);
         cour = cour->lv;
         while(cour == NULL && !estVidePile(pile))
         {
-            cour = depiler(pile, cour, 0);
+            depiler(pile, eltPile, 0);
+            cour = eltPile->adrCell;
             cour = cour->lh;
         }   
     }
@@ -47,7 +53,7 @@ cell_lvlh_t ** rechercherPrecFilsTries(cell_lvlh_t * adrpere, char w)
     {
         pprec = pprec->lh;
     }
-    return *pprec;
+    return &pprec;
 }
 
 /** TO DO
