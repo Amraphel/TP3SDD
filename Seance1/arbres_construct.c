@@ -83,52 +83,44 @@ cell_lvlh_t *allocPoint(char val)
  *     - NULL si l'arbre resultatnt est vide
  *     - l'adresse de la racine de l'arbre sinon
 */
-cell_lvlh_t* pref2lvlh(eltPrefPostFixee_t * tabEltPref,int* nbRacines)
+cell_lvlh_t* pref2lvlh(eltPrefPostFixee_t * tabEltPref,int nbRacines)
 {
-     int fun =0;
-
-    int* code= malloc(sizeof(int));
+    int code=0;
     cell_lvlh_t* nouv = NULL;
-    eltType* eltPile = NULL;
+    eltType eltPile;
 
+    cell_lvlh_t* adrTete=NULL;
+    cell_lvlh_t** pprec=&adrTete;
 
     pile_t * pile = initPile(PILE_SZ);
     eltPrefPostFixee_t * courLc=tabEltPref;
-    cell_lvlh_t* adrTete=NULL;
-    cell_lvlh_t** pprec=&adrTete;
-    int NB_fils_ou_frere= *nbRacines;
-    fprintf(stderr,"1\n");
-    
+    int NB_fils_ou_frere= nbRacines;
+
+
     while (NB_fils_ou_frere>0 || !estVidePile(pile))
     {
-        fprintf(stderr,"Tour : %d\n", fun);
-
+        
         if(NB_fils_ou_frere>0){
-             fprintf(stderr, "%c dans fils\n", courLc->val);
-            // fprintf(stderr, "%d dans fils\n", NB_fils_ou_frere);
             nouv = allocPoint(courLc->val);
-            (*pprec)=nouv;
+            *pprec=nouv;
             
-            eltPile = malloc(sizeof(eltType));
-            eltPile->adrCell=NULL;
-            eltPile->adrPrec=&(nouv->lh);
-            eltPile->nbFils_ou_Freres=NB_fils_ou_frere-1;
-            empiler(pile,eltPile, code);
+            eltPile.adrPrec=&(nouv->lh);
+            eltPile.nbFils_ou_Freres=NB_fils_ou_frere-1;
+            
+            empiler(pile,&eltPile, &code);
             pprec=&(nouv->lv);
             NB_fils_ou_frere= (courLc->nbFils);
             courLc= courLc+1;
 
         }else{
             if(!estVidePile(pile)){
-                fprintf(stderr, "%c dans frere\n", courLc->val);
-                depiler(pile,eltPile,code);
-                pprec=eltPile->adrPrec;
-                NB_fils_ou_frere=eltPile->nbFils_ou_Freres;
+                depiler(pile,&eltPile,&code);
+                pprec=eltPile.adrPrec;
+                NB_fils_ou_frere=eltPile.nbFils_ou_Freres;
                 //  fprintf(stderr,"Test : %d\n", NB_fils_ou_frere);
             }
         }
         
-        fun++;
     }
     libererPile(&pile);
     return adrTete;
@@ -136,11 +128,23 @@ cell_lvlh_t* pref2lvlh(eltPrefPostFixee_t * tabEltPref,int* nbRacines)
 
 }
 
+
 /** TO DO
  * @brief liberer les blocs memoire d'un arbre
  * @param [in] adrPtRacine l'adresse du pointeur de la racine d'un arbre
  */
-//  libererArbre()
-// {
-// // TO DO
-// }
+void libererArbre(cell_lvlh_t** adrPtRacine)
+{
+    if((*adrPtRacine)){
+        if((*adrPtRacine)->lv){
+            libererArbre(&(*adrPtRacine)->lv);
+        }
+        if((*adrPtRacine)->lh){
+            libererArbre(&(*adrPtRacine)->lh);
+        }
+        free(*adrPtRacine);
+
+        *adrPtRacine=NULL;
+    }
+
+}

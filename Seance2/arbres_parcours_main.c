@@ -26,7 +26,7 @@ TEST(nouvCell) {
 	free(new);
 }
 
-/*
+
 TEST(getNbFils_ou_Freres) {
 	int nbRacines = 0;
 	int nbEltsPref = 0;
@@ -79,7 +79,7 @@ TEST(printPostfixee) {
 
 	nbRacines = lirePref_fromFileName("../pref_exTP.txt", tabEltPref, &nbEltsPref);
 	racine = pref2lvlh(tabEltPref, nbRacines);
-
+	fprintf(stderr,"Prefonc\n");
 	printPostfixee(stdout, racine);
 	printPostfixee(file, racine);
 	fclose(file);
@@ -87,7 +87,7 @@ TEST(printPostfixee) {
 	
 	libererArbre(&racine);
 }
-*/
+
 
 END_TEST_GROUP(ARBRE_PARCOURS)
 

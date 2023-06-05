@@ -12,37 +12,37 @@
  * @param [in] taille taille de la pile
  * @return l'adresse de la structure
  */
-pile_t* initPile(int taille)
+pile_t * initPile(int taille)
 {
-    if(taille !=0) //taille différent de 0 
-    {
-        pile_t* pile = malloc(sizeof(pile_t));
-
-        //initialisation des valeurs
-        pile->taille = taille;
-        pile->sommet = -1;
-        pile->base = malloc(sizeof(taille*sizeof(eltType))); //allocation de la base
-
-        return pile;
+    pile_t * p = (pile_t *)malloc(sizeof(pile_t));//allocation mémoire 
+    if(p){
+        if (taille>0)//si la taille est non nulle
+        {
+            p->taille = taille;
+            p->sommet = -1;
+            p->base = (eltType *)malloc(taille*sizeof(eltType));
+        }else //Si la taille est nulle
+            p = NULL;
+    }else { //Si l'allocation échoue
+        p = NULL;   
     }
-    else //taille egale a 0 donc retourner null
-        return NULL;
-
-    
+        
+    return p;
 }
+
 
 
 /** TO DO
  * @brief Liberer les memoires occupees par la pile
  * @param [in, out] adrPtPile l'adresse du pointeur de la structure pile_t
  */
-void libererPile(pile_t** adrPtPile)
+void libererPile(pile_t ** adrPtPile)
 {
-    if(*adrPtPile != NULL)
+    if (*adrPtPile) //si la pile est non nulle, on libère la base puis la pile
     {
-        free((*adrPtPile)->base); //libération des éléments dynamique
-        free((*adrPtPile)); //libération des éléments statiques (sommet, taille)
-        *adrPtPile = NULL; //ne pointe plus sur la liste libéré
+        free((*adrPtPile)->base);
+        free(*adrPtPile);
+        *adrPtPile = NULL;
     }
 }
 
@@ -52,12 +52,10 @@ void libererPile(pile_t** adrPtPile)
  * @param [in] ptPile l'adresse de la structure pile_t
  * @return 1 - vide, ou 0 - non vide
  */
-int estVidePile(pile_t * ptPile)
+ int estVidePile(pile_t * ptPile)
 {
-    if(ptPile->sommet == -1)
-        return 1;
-    else
-        return 0;
+    return  (ptPile->sommet == -1);
+
 }
 
 
@@ -69,18 +67,20 @@ int estVidePile(pile_t * ptPile)
  *                     *code = 0 si reussi
  *                           = 1 si echec
  */
-void empiler(pile_t * ptPile, eltType * ptVal, int* code)
+void empiler(pile_t * ptPile, eltType * ptVal, int * code)
 {
-    if(ptPile->sommet < ptPile->taille-1)
+    if (ptPile->taille-1 > ptPile->sommet) //si la pile est assez grande pour accueillir un nouvel élément
     {
-        ptPile->sommet +=1;
-        *(ptPile->base + ptPile->sommet) = *ptVal;
+        ptPile->sommet++; //On augment le sommet
+        copyElt(ptVal, &(ptPile->base[ptPile->sommet])); // On insere l'élément
         *code = 0;
     }
-    else 
+    else
+    {
         *code = 1;
-
+    }
 }
+
 
 
 /** TO DO
@@ -91,17 +91,16 @@ void empiler(pile_t * ptPile, eltType * ptVal, int* code)
  *                     *code = 0 si reussi
  *                           = 1 si echec
  */
-void depiler(pile_t* ptPile, eltType* ptRes,int* code)
+void depiler(pile_t * ptPile, eltType * ptRes, int * code)
 {
-    if(estVidePile(ptPile)==0)
+    if (!estVidePile(ptPile))//si la pile est non vide
     {
-        
-        *ptRes = *(ptPile->base + ptPile->sommet);
-        ptPile->sommet -=1;
+        copyElt(&(ptPile->base[ptPile->sommet]), ptRes); //On récupère l'élément
+        ptPile->sommet--;//On réduit le sommet
         *code = 0;
-        
     }
     else 
+    {
         *code = 1;
-
+    }
 }

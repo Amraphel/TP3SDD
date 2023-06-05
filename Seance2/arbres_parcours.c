@@ -40,26 +40,27 @@ int getNbFils_ou_Freres( cell_lvlh_t * ptCell)
  */
 void printPostfixee(FILE* file, cell_lvlh_t * racine)
 {
+    int code=0;
     cell_lvlh_t * cour = racine;
     pile_t* pile = initPile(NB_ELTPREF_MAX);
-    eltType* eltPile;
+    eltType eltPile;
     while( cour != NULL)
     {
         while( cour->lv != NULL)
         {
             
-            eltPile->adrCell = cour;
-            eltPile->adrPrec = NULL;
-            eltPile->nbFils_ou_Freres = getNbFils_ou_Freres(cour);
-            empiler(pile, eltPile, 0);
+            eltPile.adrCell = cour;
+            eltPile.adrPrec = NULL;
+            eltPile.nbFils_ou_Freres = getNbFils_ou_Freres(cour);
+            empiler(pile, &eltPile, &code);
             cour = cour->lv;
         }
         fprintf(file, "(%c, %d)", cour->val, cour->lv->val);
         cour = cour->lv;
         while( cour != NULL)
         {
-            depiler(pile, eltPile, 0);
-            cour = eltPile->adrCell;
+            depiler(pile, &eltPile, &code);
+            cour = eltPile.adrCell;
             fprintf(file, "(%c, %d)", cour->val, cour->lh->val);
             cour = cour->lh;
         }

@@ -21,19 +21,19 @@
 cell_lvlh_t * rechercher_v(cell_lvlh_t * racine, char v)
 {
     cell_lvlh_t* cour = racine;
-    eltType* eltPile;
+    eltType eltPile;
     pile_t* pile = initPile(NB_ELTPREF_MAX);
     while(cour != NULL && cour->val != v)
     {
-        eltPile->adrCell= cour;
-        eltPile->adrPrec = NULL;
-        eltPile->nbFils_ou_Freres= getNbFils_ou_Freres(cour);
-        empiler(pile, eltPile, 0);
+        eltPile.adrCell= cour;
+        eltPile.adrPrec = NULL;
+        eltPile.nbFils_ou_Freres= getNbFils_ou_Freres(cour);
+        empiler(pile, &eltPile, 0);
         cour = cour->lv;
         while(cour == NULL && !estVidePile(pile))
         {
-            depiler(pile, eltPile, 0);
-            cour = eltPile->adrCell;
+            depiler(pile, &eltPile, 0);
+            cour = eltPile.adrCell;
             cour = cour->lh;
         }   
     }
@@ -48,12 +48,12 @@ cell_lvlh_t * rechercher_v(cell_lvlh_t * racine, char v)
  */
 cell_lvlh_t ** rechercherPrecFilsTries(cell_lvlh_t * adrpere, char w)
 {
-    cell_lvlh_t* pprec = adrpere->lv;
-    while (pprec != NULL && pprec->val <= w)
+    cell_lvlh_t** pprec = &adrpere->lv;
+    while (pprec != NULL && (*pprec)->val <= w)
     {
-        pprec = pprec->lh;
+        pprec = &(*pprec)->lh;
     }
-    return &pprec;
+    return pprec;
 }
 
 /** TO DO
@@ -69,13 +69,13 @@ int insererTrie(cell_lvlh_t * racine, char v, char w)
     cell_lvlh_t* adrpere = rechercher_v(racine, v);
     if(adrpere != NULL)
     {
-        cell_lvlh_t* pprec = rechercherPrecFilsTries(adrpere, w);
+        cell_lvlh_t** pprec = rechercherPrecFilsTries(adrpere, w);
         cell_lvlh_t* nouv = malloc(sizeof(cell_lvlh_t));
         if(nouv != NULL)
         {
             nouv->val = w;
             nouv->lv = NULL;
-            nouv->lh = pprec;
+            nouv->lh = (*pprec);
             code_retour = 1; 
         }
     }

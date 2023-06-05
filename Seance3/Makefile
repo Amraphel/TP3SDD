@@ -9,7 +9,7 @@ DIRUTEST = ../
 DIRCOMM = ../
 
 #liste des fichiers source
-SRC = $(wildcard $(DIRCOMM)*.c *.c)  ../Seance1/arbres_construct.c
+SRC = $(wildcard $(DIRCOMM)*.c *.c)  ../Seance1/arbres_construct.c ../Seance2/arbres_parcours.c
 
 HEADERS = $(wildcard $(DIRCOMM)*.h *.h) 
 
@@ -23,6 +23,9 @@ arbres_insert.o: arbres_insert.c $(HEADERS)
 	$(CC) $(CFLAGS) -c $< -o $@
 	
 ../Seance1/arbres_construct.o: ../Seance1/arbres_construct.c $(HEADERS)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+../Seance2/arbres_parcours.o: ../Seance2/arbres_parcours.c $(HEADERS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 pile.o: pile.c pile.h

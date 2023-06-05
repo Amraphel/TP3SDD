@@ -84,11 +84,26 @@ TEST(pref2lvlh1_exTP) {
 	printf("\033[35m\npref2lvlh1_exTP :");
 	printf("\033[0m\n");
 
-	nbRacines = lirePref_fromFileName("../pref_exTP.txt", tabEltPref, &nbEltsPref);
+	nbRacines = lirePref_fromFileName("../pref_exTP.txt", tabEltPref, nbEltsPref);
 
 	racine=pref2lvlh(tabEltPref,&nbRacines);
-	printf("val: %c fin\n",racine->val);
-	CHECK( 'A' == racine->val ); 
+	CHECK(racine->val == 'A');
+	CHECK(racine->lv->val =='B');
+	CHECK(racine->lv->lv->val == 'E');
+	CHECK(racine->lv->lv->lh->val == 'J');
+	CHECK(racine->lv->lh->val == 'D');
+	CHECK(racine->lv->lh->lh->val == 'H');
+	CHECK(racine->lv->lh->lh->lh == NULL);
+	CHECK(racine->lv->lh->lh->lv->val == 'G');
+	CHECK(racine->lh->val == 'C');
+	CHECK(racine->lh->lv->val == 'F');
+	CHECK(racine->lh->lv->lv->val == 'K');
+	CHECK(racine->lh->lv->lv->lh->val == 'M');
+	CHECK(racine->lh->lv->lv->lh->lh->val == 'T');
+	CHECK(racine->lh->lv->lh->val == 'I');
+
+	libererArbre(&racine);
+	fclose(file);
 }
 
 
