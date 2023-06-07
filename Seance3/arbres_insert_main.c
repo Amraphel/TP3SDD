@@ -51,7 +51,7 @@ TEST(rechercher_v) {
 
 	libererArbre(&racine);
 }
-/*
+
 TEST(rechercherPrecFilsTries) {
 	int nbRacines = 0;
 	int nbEltsPref = 0;
@@ -79,9 +79,48 @@ TEST(rechercherPrecFilsTries) {
 }
 
 TEST(insererTrie) {
-// TO DO
+	int nbRacines = 0;
+	int nbEltsPref = 0;
+	eltPrefPostFixee_t tabEltPref[NB_ELTPREF_MAX];
+	cell_lvlh_t *racine = NULL;
+
+	printf("\033[34m\ninsererTrie :");
+	printf("\033[0m\n");
+	nbRacines = lirePref_fromFileName("../pref_exTP.txt", tabEltPref, &nbEltsPref);
+	racine = pref2lvlh(tabEltPref, nbRacines);
+
+	insererTrie(racine,'A','C');
+	printf("\033[34mPremiere Insertion : C dans A");
+	printf("\033[0m\n");
+	CHECK('B' == racine->lv->val);
+	CHECK('C' == racine->lv->lh->val);
+	CHECK('D' == racine->lv->lh->lh->val);
+
+	printf("\033[34mDeuxieme Insertion : B dans A");
+	printf("\033[0m\n");
+	insererTrie(racine, 'A', 'B');
+	CHECK('B' == racine->lv->val);
+	CHECK('B' == racine->lv->lh->val);
+	CHECK('C' == racine->lv->lh->lh->val);
+
+	printf("\033[34mTroisieme Insertion : I dans F");
+	printf("\033[0m\n");
+	insererTrie(racine, 'F', 'I');
+	CHECK('F' == racine->lh->lv->val);
+	CHECK('I' == racine->lh->lv->lv->val);
+	CHECK('K' == racine->lh->lv->lv->lh->val);
+	
+	// printf("\033[34mQuatrieme Insertion : Z dans C");
+	// printf("\033[0m\n");
+	// insererTrie(racine, 'C', 'Z');
+	// CHECK('F' == racine->lh->lv->val);
+	// CHECK('I' == racine->lh->lv->lh->val);
+	// CHECK('Z' == racine->lh->lv->lh->lh->val);
+
+
+	libererArbre(&racine);
 }
-*/
+
 END_TEST_GROUP(ARBRE_INSERT)
 
 int main(void) {

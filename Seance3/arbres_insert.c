@@ -9,6 +9,7 @@
 #include "../eltsArbre.h"
 #include "arbres_insert.h"
 #include "../Seance2/arbres_parcours.h"
+#include "../Seance1/arbres_construct.h"
 
 
 /**
@@ -20,24 +21,36 @@
  */
 cell_lvlh_t * rechercher_v(cell_lvlh_t * racine, char v)
 {
-    cell_lvlh_t* cour = racine;
+    cell_lvlh_t** cour = &racine;
     eltType eltPile;
     pile_t* pile = initPile(NB_ELTPREF_MAX);
-    while(cour != NULL && cour->val != v)
+    int code=0;
+    while(((*cour) != NULL || !estVidePile(pile)) && (*cour)->val != v )
     {
-        eltPile.adrCell= cour;
-        eltPile.adrPrec = NULL;
-        eltPile.nbFils_ou_Freres= getNbFils_ou_Freres(cour);
-        empiler(pile, &eltPile, 0);
-        cour = cour->lv;
-        while(cour == NULL && !estVidePile(pile))
-        {
-            depiler(pile, &eltPile, 0);
-            cour = eltPile.adrCell;
-            cour = cour->lh;
-        }   
+        
+        if((*cour)->lv!=NULL)
+        {   
+            eltPile.adrCell = *cour;
+            eltPile.adrPrec = NULL;
+            eltPile.nbFils_ou_Freres = getNbFils_ou_Freres((*cour)->lv);
+            empiler(pile, &eltPile, &code);
+            cour = &(*cour)->lv;
+        } else {
+            if((*cour)->lh != NULL){
+                cour=&(*cour)->lh;
+            }else {
+                while(((*cour)->lh == NULL) && !estVidePile(pile) && (*cour)->val != v)
+                {
+                    depiler(pile, &eltPile, &code);
+                    cour = &eltPile.adrCell;     
+                }
+                cour = &(*cour)->lh;
+            }
+        }
+        
     }
-    return cour;
+    libererPile(&pile);
+    return *cour;
 }
 
 /**
@@ -49,7 +62,7 @@ cell_lvlh_t * rechercher_v(cell_lvlh_t * racine, char v)
 cell_lvlh_t ** rechercherPrecFilsTries(cell_lvlh_t * adrpere, char w)
 {
     cell_lvlh_t** pprec = &adrpere->lv;
-    while (pprec != NULL && (*pprec)->val <= w)
+    while (*pprec != NULL && (*pprec)->val <= w)
     {
         pprec = &(*pprec)->lh;
     }
@@ -70,12 +83,11 @@ int insererTrie(cell_lvlh_t * racine, char v, char w)
     if(adrpere != NULL)
     {
         cell_lvlh_t** pprec = rechercherPrecFilsTries(adrpere, w);
-        cell_lvlh_t* nouv = malloc(sizeof(cell_lvlh_t));
+        cell_lvlh_t* nouv = allocPoint(w);
         if(nouv != NULL)
         {
-            nouv->val = w;
-            nouv->lv = NULL;
             nouv->lh = (*pprec);
+            (*pprec)=nouv;
             code_retour = 1; 
         }
     }
