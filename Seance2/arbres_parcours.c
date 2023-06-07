@@ -17,19 +17,22 @@
  */
 int getNbFils_ou_Freres( cell_lvlh_t * ptCell)
 {
-    int nbFils_ou_Freres = 0;
-    if (ptCell != NULL)
+    int NB_fils_ou_frere = 0; //initialisation nombre de fils ou frère
+    if (ptCell != NULL) //pointeur non null
     {
-        nbFils_ou_Freres = 1;
-        cell_lvlh_t * pprec1 = ptCell;
-        while (pprec1->lh != NULL)
+        NB_fils_ou_frere = 1; //car il existe
+        cell_lvlh_t * cour = ptCell;//pointeur courant
+        while (cour->lh != NULL)//possède un frère ?
         {
-            nbFils_ou_Freres += 1;
-            pprec1 = pprec1->lh;
+            NB_fils_ou_frere += 1;//incrémentation pour chaque frère
+            cour = cour->lh;//déplacement dans l'arbre horizontalement
         }
     }
+    return NB_fils_ou_frere;//retourne le nombre de frère
 
-    return nbFils_ou_Freres;
+    //LEXIQUE variables locales :
+    // NB_fils_ou_frere -> nombre de frère que possède la cellule
+    // cour -> pointeur courant permettant de se déplacer dans l'arbre
 }
 
 
@@ -40,36 +43,47 @@ int getNbFils_ou_Freres( cell_lvlh_t * ptCell)
  */
 void printPostfixee(FILE* file, cell_lvlh_t * racine)
 {
-    int code=0;
-    cell_lvlh_t ** cour = &racine;
-    pile_t* pile = initPile(NB_ELTPREF_MAX);
-    eltType eltPile;
-    while( (*cour) != NULL || !estVidePile(pile))
+    int code=0; //code pour l'empilement et le dépilement 
+    cell_lvlh_t ** cour = &racine; //double pointeur couran
+    pile_t* pile = initPile(NB_ELTPREF_MAX); //pile
+    eltType eltPile; //element de la pile
+    while( (*cour) != NULL || !estVidePile(pile)) //pointeur courant nonn null et la pile n'est pas vide
     {
-        if((*cour)->lv!=NULL)
+        if((*cour)->lv!=NULL)//possède un fils 
         {   
+            //initialisation des valeurs de l'element de la pile
             eltPile.adrCell = NULL;
             eltPile.adrPrec = cour;
-            eltPile.nbFils_ou_Freres = getNbFils_ou_Freres((*cour)->lv);
-            empiler(pile, &eltPile, &code);
-            cour = &(*cour)->lv;
-        } else {
-            if((*cour)->lh != NULL){
-                fprintf(file, "(%c,%d) ", (*cour)->val, 0);
-                cour=&(*cour)->lh;
-            }else {
-                while(((*cour)->lh == NULL) && !estVidePile(pile) )
+            eltPile.nbFils_ou_Freres = getNbFils_ou_Freres((*cour)->lv); //recuperation du nombre de frère
+            empiler(pile, &eltPile, &code);//sauvegarde des données de cet element
+            cour = &(*cour)->lv;//déplacement du pointeur courant verticalement
+        } 
+        else //ne possède pas de fils
+        {
+            if((*cour)->lh != NULL){//possède un frère
+                fprintf(file, "(%c,%d) ", (*cour)->val, 0);//ecriture dans le fichier le couple
+                cour=&(*cour)->lh; //déplacement horizontal de cour
+            }
+            else //ne possède pas de fils 
+            {
+                while(((*cour)->lh == NULL) && !estVidePile(pile) ) //pointeur courant non null et la pile non vide
                 {
-                    fprintf(file, "(%c,%d) ", (*cour)->val, getNbFils_ou_Freres((*cour)->lv));
-                    depiler(pile, &eltPile, &code);
-                    cour = eltPile.adrPrec;
+                    fprintf(file, "(%c,%d) ", (*cour)->val, getNbFils_ou_Freres((*cour)->lv));//écriture dans le fichier le couple
+                    depiler(pile, &eltPile, &code);//supprime les données de l'élément de la pile
+                    cour = eltPile.adrPrec;//cour devient pointe sur l'élement supprimer
                     
                 }
-                fprintf(file, "(%c,%d) ", (*cour)->val, eltPile.nbFils_ou_Freres);
-                cour = &(*cour)->lh;
+                fprintf(file, "(%c,%d) ", (*cour)->val, eltPile.nbFils_ou_Freres);//écriture dans le fichier le couple
+                cour = &(*cour)->lh;// deplacement horizontale de cour
             }
         }
     }
-    fprintf(file,"%d\n", getNbFils_ou_Freres(racine));
-    libererPile(&pile);
+    fprintf(file,"%d\n", getNbFils_ou_Freres(racine));//écriture du nombre de fils de la racine 
+    libererPile(&pile);//libération de l'espace mémoire de la pile
+
+    //LEXIQUE variables locales :
+    // code -> permet de savoir si l'empliement ou de dépilement c'est bien fait
+    // cour -> pointeur courant permettant de se déplacer dans l'arbre
+    // pile -> pile pour stocker les éléments pile et se déplacer correctemant dans l'arbre
+    // eltPile -> élément de la pile 
 }
