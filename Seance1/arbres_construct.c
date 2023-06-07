@@ -18,27 +18,35 @@
  */
 int lirePref_fromFileName(char * fileName, eltPrefPostFixee_t* tabEltPref , int* nbEltsPref)
 {
-    int nbRacine = 0;
-    char c ;
+    int nbRacine = 0; // entier représentant le nombre de racine
+    char c ;          // caractère indiquateur de fin de fichier et utilisé pour surpprimer les espaces entre les couples
     
-    if(tabEltPref && nbEltsPref){
-        FILE * file = fopen(fileName, "r");
-        *nbEltsPref = 0;
+    if(tabEltPref && nbEltsPref){ //tableau des éléments et adresse mémoire du nombre d'élément non vide
+        FILE * file = fopen(fileName, "r"); // ouverture du fichier
+        *nbEltsPref = 0; //initialisation à 0 élément
 
-        if(file)
+        if(file) //vérification si le fichier est bien ouvert
         {
-            fscanf(file,"%d", &nbRacine);
-            c = fgetc(file);
-            while(c == ' ')
-            {  
+            fscanf(file,"%d", &nbRacine); //récupération le nombre d'arbre différent
+            c = fgetc(file); // déplacement d'un dans le fichier
+            // déplacement dans tous le fichier
+            while(c == ' ') 
+            {
+                //récupération des information du fichier sous forme de couple et suppression des espaces 
+                //stockage des valeurs dans un tableau 
                 fscanf(file, "%c %d", &tabEltPref[*nbEltsPref].val, &tabEltPref[*nbEltsPref].nbFils);
-                *nbEltsPref +=1;
-                c = fgetc(file);
+                *nbEltsPref +=1; //augmentation du nombre d'élement à chaque passage
+                c = fgetc(file); //déplacement d'un dans le fichier
             }
-            fclose(file);
+            fclose(file); //fermeture du fichier
         }
     }
-    return nbRacine;
+    return nbRacine; // retourne le nombre de racine
+
+
+    //LEXIQUE variables locales:
+    // nbRacine -> nombre de recine
+    // c -> permet le déplacement dans le fichier (indicateur de fin de fichier)
 }
 
 /** TO DO
@@ -49,12 +57,14 @@ int lirePref_fromFileName(char * fileName, eltPrefPostFixee_t* tabEltPref , int*
  */
 void printTabEltPref(FILE *file, eltPrefPostFixee_t *tabEltPref, int nbEltsPref)
 {
-    int ind;
-    for(ind=0; ind<nbEltsPref; ind++){
-        fprintf(file, " (%c,%d)", tabEltPref[ind].val, tabEltPref[ind].nbFils);
+    int ind; //indice d'itération
+    for(ind=0; ind<nbEltsPref; ind++){ //pour tous les élements
+        fprintf(file, " (%c,%d)", tabEltPref[ind].val, tabEltPref[ind].nbFils); //écriture dans un fichier tous les éléments
     }
-    fprintf(file,"\n");
+    fprintf(file,"\n");//retour à la ligne
 
+    //LEXIQUE variable locale:
+    // ind -> entier qui représente le nombre d'itération pour pouvoir parcourir tous les éléments
 }
 
 /** TO DO
@@ -64,15 +74,18 @@ void printTabEltPref(FILE *file, eltPrefPostFixee_t *tabEltPref, int nbEltsPref)
  */
 cell_lvlh_t *allocPoint(char val)
 {
-    cell_lvlh_t *nouv = malloc(sizeof(cell_lvlh_t));
-    if(nouv)
+    cell_lvlh_t *nouv = malloc(sizeof(cell_lvlh_t)); //allocation de mémoire
+    if(nouv) //allocation réussi
     {
+        //initiation des valeurs du cell_lvlh alloué
         nouv->val = val;
         nouv->lv = NULL;
         nouv->lh = NULL;
-        //test
     }
-    return nouv;
+    return nouv; //retourne adresse du nouveau point
+
+    //LEXIQUE variable locale :
+    // nouv -> nouvelle cellule allouée
 }
 
 /** TO DO
@@ -85,66 +98,75 @@ cell_lvlh_t *allocPoint(char val)
 */
 cell_lvlh_t* pref2lvlh(eltPrefPostFixee_t * tabEltPref,int nbRacines)
 {
-    int code=0;
-    cell_lvlh_t* nouv = NULL;
-    eltType eltPile;
+    int code=0; // code pour la fonction empiler
+    cell_lvlh_t* nouv = NULL; // nouvelle cellule
+    eltType eltPile; // contenue d'un élément de la pile
 
-    cell_lvlh_t* adrTete=NULL;
-    cell_lvlh_t** pprec=&adrTete;
+    cell_lvlh_t* adrTete=NULL; // adresse du premier element
+    cell_lvlh_t** pprec=&adrTete; // pointeur précédant
 
-    pile_t * pile = initPile(PILE_SZ);
-    eltPrefPostFixee_t * courLc=tabEltPref;
-    int NB_fils_ou_frere= nbRacines;
+    pile_t * pile = initPile(PILE_SZ); // pile
+    eltPrefPostFixee_t * courLc=tabEltPref; // pointeur courant liste continue (tableau) 
+    int NB_fils_ou_frere= nbRacines; // nombre de fils et/ou de frère
 
 
-    while (NB_fils_ou_frere>0 || !estVidePile(pile))
+    while (NB_fils_ou_frere>0 || !estVidePile(pile)) // tant que le nombre de fils ou de frère est supérieur à 0 ou que la pile n'est pas vide
     {
         
-        if(NB_fils_ou_frere>0){
-            nouv = allocPoint(courLc->val);
-            *pprec=nouv;
+        if(NB_fils_ou_frere>0){ //nombre de frère > 0
+            nouv = allocPoint(courLc->val); //allocation de mémoire
+            *pprec=nouv; 
             
+            //initialisation des informations de l'élément de la pile
             eltPile.adrPrec=&(nouv->lh);
             eltPile.nbFils_ou_Freres=NB_fils_ou_frere-1;
             
-            empiler(pile,&eltPile, &code);
-            pprec=&(nouv->lv);
-            NB_fils_ou_frere= (courLc->nbFils);
-            courLc= courLc+1;
+            empiler(pile,&eltPile, &code); //sauvegarde de l'élément dans la pile
+            pprec=&(nouv->lv); //avancement de pprec dans la liste
+            NB_fils_ou_frere= (courLc->nbFils); //mise à jour du nombre de fils ou de frère
+            courLc= courLc+1; //avancement du pointeur courant dans le tableau
 
-        }else{
-            if(!estVidePile(pile)){
-                depiler(pile,&eltPile,&code);
-                pprec=eltPile.adrPrec;
-                NB_fils_ou_frere=eltPile.nbFils_ou_Freres;
-                //  fprintf(stderr,"Test : %d\n", NB_fils_ou_frere);
+        }else{ //nombre de frère <= 0
+            if(!estVidePile(pile)){ //tant que la pile n'est pas vide
+                depiler(pile,&eltPile,&code); //supprime l'element de la pile
+                pprec=eltPile.adrPrec; // déplacement de pprec
+                NB_fils_ou_frere=eltPile.nbFils_ou_Freres; //mise a jour du nombre de fils ou de frere
             }
         }
         
     }
-    libererPile(&pile);
-    return adrTete;
-    
+    libererPile(&pile); // liberation de la pile
+    return adrTete; // retourne l'adresse de l'arbre
+
+    //LEXIQUE variable locale :
+    // code -> permet de savoir si la fonction empiler/dépiler à bien marché
+    // nouv -> nouvelle cellule
+    // eltPile -> contenue d'un élément de la pile
+    // adrTete -> adresse du premier element
+    // pprec -> pointeur précédant de l'élément courant (pointeur courLc)
+    // pile -> pile pour sauvegarder les déplacements dans l'arbre
+    // courLc -> pointeur courant liste continue (tableau) 
+    // NB_fils_ou_frere -> nombre de fils ou de frère totale
 
 }
 
 
 /** TO DO
- * @brief liberer les blocs memoire d'un arbre
+ * @brief liberer les blocs meDmoire d'un arbre
  * @param [in] adrPtRacine l'adresse du pointeur de la racine d'un arbre
  */
 void libererArbre(cell_lvlh_t** adrPtRacine)
 {
-    if((*adrPtRacine)){
-        if((*adrPtRacine)->lv){
-            libererArbre(&(*adrPtRacine)->lv);
+    if((*adrPtRacine)){//racine non nulle
+        if((*adrPtRacine)->lv){//possède un fils
+            libererArbre(&(*adrPtRacine)->lv);//libère l'espace mémoire du fils
         }
-        if((*adrPtRacine)->lh){
-            libererArbre(&(*adrPtRacine)->lh);
+        if((*adrPtRacine)->lh){//possède un frère
+            libererArbre(&(*adrPtRacine)->lh);//libère l'espace mémoire du frère
         }
-        free(*adrPtRacine);
+        free(*adrPtRacine);//libère l'espace mémoire de la racine
 
-        *adrPtRacine=NULL;
+        *adrPtRacine=NULL;//mis à null car mémoire de la racine libérer
     }
 
 }
