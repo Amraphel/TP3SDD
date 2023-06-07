@@ -61,6 +61,7 @@ TEST(getNbFils_ou_Freres) {
 //	printf("H = %c\n", racine->lv->lh->lh->val);
 	CHECK( 1 == getNbFils_ou_Freres(racine->lv->lh->lh->lv) ); // 1 fils
 
+	fclose(file);
 	libererArbre(&racine);
 }
 
@@ -79,8 +80,6 @@ TEST(printPostfixee) {
 
 	nbRacines = lirePref_fromFileName("../pref_exTP.txt", tabEltPref, &nbEltsPref);
 	racine = pref2lvlh(tabEltPref, nbRacines);
-	fprintf(stderr,"Prefonc\n");
-	printPostfixee(stdout, racine);
 	printPostfixee(file, racine);
 	fclose(file);
 	CHECK( 0 == strcmp(buffer,"(E,0) (J,0) (B,2) (D,0) (G,0) (H,1) (A,3) (K,0) (M,0) (T,0) (F,3) (I,0) (C,2) 2\n") );

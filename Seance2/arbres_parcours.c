@@ -41,29 +41,35 @@ int getNbFils_ou_Freres( cell_lvlh_t * ptCell)
 void printPostfixee(FILE* file, cell_lvlh_t * racine)
 {
     int code=0;
-    cell_lvlh_t * cour = racine;
+    cell_lvlh_t ** cour = &racine;
     pile_t* pile = initPile(NB_ELTPREF_MAX);
     eltType eltPile;
-    while( cour != NULL)
+    while( (*cour) != NULL || !estVidePile(pile))
     {
-        while( cour->lv != NULL)
-        {
-            
-            eltPile.adrCell = cour;
-            eltPile.adrPrec = NULL;
-            eltPile.nbFils_ou_Freres = getNbFils_ou_Freres(cour);
+        if((*cour)->lv!=NULL)
+        {   
+            eltPile.adrCell = NULL;
+            eltPile.adrPrec = cour;
+            eltPile.nbFils_ou_Freres = getNbFils_ou_Freres((*cour)->lv);
             empiler(pile, &eltPile, &code);
-            cour = cour->lv;
-        }
-        fprintf(file, "(%c, %d)", cour->val, cour->lv->val);
-        cour = cour->lv;
-        while( cour != NULL)
-        {
-            depiler(pile, &eltPile, &code);
-            cour = eltPile.adrCell;
-            fprintf(file, "(%c, %d)", cour->val, cour->lh->val);
-            cour = cour->lh;
+            cour = &(*cour)->lv;
+        } else {
+            if((*cour)->lh != NULL){
+                fprintf(file, "(%c,%d) ", (*cour)->val, 0);
+                cour=&(*cour)->lh;
+            }else {
+                while(((*cour)->lh == NULL) && !estVidePile(pile) )
+                {
+                    fprintf(file, "(%c,%d) ", (*cour)->val, getNbFils_ou_Freres((*cour)->lv));
+                    depiler(pile, &eltPile, &code);
+                    cour = eltPile.adrPrec;
+                    
+                }
+                fprintf(file, "(%c,%d) ", (*cour)->val, eltPile.nbFils_ou_Freres);
+                cour = &(*cour)->lh;
+            }
         }
     }
+    fprintf(file,"%d\n", getNbFils_ou_Freres(racine));
     libererPile(&pile);
 }
