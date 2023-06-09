@@ -21,36 +21,48 @@
  */
 cell_lvlh_t * rechercher_v(cell_lvlh_t * racine, char v)
 {
-    cell_lvlh_t** cour = &racine;
-    eltType eltPile;
-    pile_t* pile = initPile(NB_ELTPREF_MAX);
-    int code=0;
-    while(((*cour) != NULL || !estVidePile(pile)) && (*cour)->val != v )
+    cell_lvlh_t** cour = &racine; //initialisation du pointeur courant
+    eltType eltPile; //initialisation d'un element de la pile
+    pile_t* pile = initPile(NB_ELTPREF_MAX); //initialisation de la pile
+    int code=0; //code de retour des fonctions empiler et depiler
+    while(((*cour) != NULL || !estVidePile(pile)) && (*cour)->val != v ) //tant que l'on a pas tout parcouru
     {
         
-        if((*cour)->lv!=NULL)
+        if((*cour)->lv!=NULL)//possede un fils
         {   
+            //initialisation des informations de l'élément de la pile
             eltPile.adrCell = *cour;
             eltPile.adrPrec = NULL;
-            eltPile.nbFils_ou_Freres = getNbFils_ou_Freres((*cour)->lv);
-            empiler(pile, &eltPile, &code);
-            cour = &(*cour)->lv;
-        } else {
-            if((*cour)->lh != NULL){
-                cour=&(*cour)->lh;
-            }else {
-                while(((*cour)->lh == NULL) && !estVidePile(pile) && (*cour)->val != v)
+            eltPile.nbFils_ou_Freres = getNbFils_ou_Freres((*cour)->lv); //recuperation du nombre de fils
+            empiler(pile, &eltPile, &code); //sauvegarde de l'element dans la pile
+            cour = &(*cour)->lv; //deplacement verticale du pointeur courant
+        } 
+        else //ne possede pas de fils
+        {
+            if((*cour)->lh != NULL)//possede un frere
+            {
+                cour=&(*cour)->lh;//deplacement horizontal du pointeur courant
+            }
+            else //ne possede pas de frere
+            {
+                while(((*cour)->lh == NULL) && !estVidePile(pile) && (*cour)->val != v) //tant que l'on a pas parcouru tout l'arbre ou pas trouvela valeur
                 {
-                    depiler(pile, &eltPile, &code);
-                    cour = &eltPile.adrCell;     
+                    depiler(pile, &eltPile, &code); //suppression de l'element dans la pile
+                    cour = &eltPile.adrCell; //recuperation de l'adresse de la cellule de l'element pile qui vient d'etre supprimer  
                 }
-                cour = &(*cour)->lh;
+                cour = &(*cour)->lh; //deplacement horizantal du pointeur courant
             }
         }
         
     }
-    libererPile(&pile);
-    return *cour;
+    libererPile(&pile); //libération de la memoire de la pile
+    return *cour;//retourne l'adresse du point contenant la valeur ou null
+
+    // LEXIQUE variables locales :
+    // cour -> pointeur courant permettant de se déplacer dans l'arbre
+    // eltPile -> element de la pile
+    // pile -> pile pour sauvegarder les déplacements dans l'arbre
+    // code -> permet de vérifier si l'empilement ou le dépilement c'est bien passé
 }
 
 /**
@@ -61,12 +73,15 @@ cell_lvlh_t * rechercher_v(cell_lvlh_t * racine, char v)
  */
 cell_lvlh_t ** rechercherPrecFilsTries(cell_lvlh_t * adrpere, char w)
 {
-    cell_lvlh_t** pprec = &adrpere->lv;
-    while (*pprec != NULL && (*pprec)->val <= w)
+    cell_lvlh_t** pprec = &adrpere->lv; //initialisation du pointeur precedant
+    while (*pprec != NULL && (*pprec)->val <= w) //tant qu'on ne trouve pas la valeur et que l'on a pas tout parcouru
     {
-        pprec = &(*pprec)->lh;
+        pprec = &(*pprec)->lh; //deplacement horizontal du pointeur précédant
     }
-    return pprec;
+    return pprec; //retourne l'adresse du pointeur precedant w
+
+    //LEXIQUE varible locale:
+    //pprec -> pointeur precedant la valeur a trouver 
 }
 
 /** TO DO
@@ -78,21 +93,28 @@ cell_lvlh_t ** rechercherPrecFilsTries(cell_lvlh_t * adrpere, char w)
  */
 int insererTrie(cell_lvlh_t * racine, char v, char w)
 {
-    int code_retour = 0;
-    cell_lvlh_t* adrpere = rechercher_v(racine, v);
-    if(adrpere != NULL)
+    int code_retour = 0; //initialisation du code de retour
+    cell_lvlh_t* adrpere = rechercher_v(racine, v); //recuperation de l'adresse de v
+    if(adrpere != NULL) //pere existe
     {
-        cell_lvlh_t** pprec = rechercherPrecFilsTries(adrpere, w);
-        cell_lvlh_t* nouv = allocPoint(w);
-        if(nouv != NULL)
+        cell_lvlh_t** pprec = rechercherPrecFilsTries(adrpere, w); //pointeur precedant pointe sur l'adresse où il faut insérer w
+        cell_lvlh_t* nouv = allocPoint(w); //allocation de la nouvelle cellule
+        if(nouv != NULL)//allocation réussie
         {
-            if(pprec){
-                nouv->lh = (*pprec);
+            if(pprec){//pprec non null
+                nouv->lh = (*pprec); //pprec devient le frere de nouv
             }
-            (*pprec)=nouv;
-            fprintf(stderr,"val : %c\n",(*pprec)->val );
-            code_retour = 1; 
+            (*pprec)=nouv;//insert nouv a l'ancinene place de pprec
+            code_retour = 1; //isertion reussie
         }
     }
     return code_retour;
+
+    //LEXIQUE variables locales :
+    //code_retour -> code de retour 1 insertinon reussi 0 echec de l'insertion
+    //adrpere -> adresse du pere de la valeur que nous allons inserer
+    //pprec -> pointeur precedant de w
+    //nouv -> cellule de w
 }
+
+
