@@ -31,11 +31,11 @@ TEST(nouvCell) { //TEST création d'une cellule
 
 
 TEST(lirePref_fromFileName_exTP) {//TEST récupération de donnée dans un fichier
-	int nbRacines = 0; //nombre de racine
-	int nbEltsPref = 0; //nombre d'élément totale du fichier
-	eltPrefPostFixee_t tabEltPref[NB_ELTPREF_MAX]; //tableau des éléments 
+	int nbRacines = 0; //initialisation nombre de racine
+	int nbEltsPref = 0; //initialisation nombre totale d'élément dans le fichier
+	eltPrefPostFixee_t tabEltPref[NB_ELTPREF_MAX]; //initialisation du tableau des éléments 
 
-	nbRacines = lirePref_fromFileName("../pref_exTP.txt", tabEltPref, &nbEltsPref); //récupération des inforamations
+	nbRacines = lirePref_fromFileName("../pref_exTP.txt", tabEltPref, &nbEltsPref); //récuperation du nombre de racine
 
 	printf("\033[34m\nlirePref_fromFileName_exTP :");//affichage de la source
 	printf("\033[0m\n");
@@ -56,42 +56,42 @@ TEST(lirePref_fromFileName_exTP) {//TEST récupération de donnée dans un fichi
 	CHECK( 0 == tabEltPref[nbEltsPref-1].nbFils ); //il a bien 0 fils ?
 
 	//LEXIQUE variables locales:
-	//nbRacines -> nombre de racine (de neoud) de la base de donnée
+	//nbRacines -> nombre de racine au début du fichier
 	//nbEltsPref -> nombre d'élement totale du fichier (taille max du tableau de donnée)
-	//tabEltPref -> tableau des élément contenue dans le fichier
+	//tabEltPref -> tableau des élément contenus dans le fichier
 }
 
 TEST(printTabEltPref_exTP) {//TEST affichage des valeurs
-	int nbRacines = 0; //nombre de racine
-	int nbEltsPref = 0; //nombre d'élément totale du fichier
-	eltPrefPostFixee_t tabEltPref[NB_ELTPREF_MAX]; //tableau des éléments
+	int nbRacines = 0; //initialisation nombre de racine
+	int nbEltsPref = 0; //initialisation nombre totale d'élément dans le fichier
+	eltPrefPostFixee_t tabEltPref[NB_ELTPREF_MAX]; //initialisation tableau des éléments
 
-	char buffer[1024]; //buffer de taille 1024 espace d'écriture
+	char buffer[1024]; // initialisation buffer de taille 1024 espace d'écriture
 	FILE * file = fmemopen(buffer, 1024, "w"); //ouverture du fichier qui contiendra les données en mode écriture
 	REQUIRE ( NULL != file); //vérification que le fichier est bien ouvert
 
 	printf("\033[34m\nprintPref_exTP :");//affichage de la source
 	printf("\033[0m\n");
 
-	nbRacines = lirePref_fromFileName("../pref_exTP.txt", tabEltPref, &nbEltsPref); //récupération des informations
+	nbRacines = lirePref_fromFileName("../pref_exTP.txt", tabEltPref, &nbEltsPref); //récuperation du nombre de racine
 	fprintf(file, "%d", nbRacines); //écriture du nombre de racine dans le fichier
 	printTabEltPref(file, tabEltPref, nbEltsPref);//ecriture des couples d'element dans le fichier
 	fclose(file);//fermeture du fichier
 	CHECK( 0 == strcmp(buffer, "2 (A,3) (B,2) (E,0) (J,0) (D,0) (H,1) (G,0) (C,2) (F,3) (K,0) (M,0) (T,0) (I,0)\n") ); //vérification : écriture du fichier correct ?
 
 	//LEXIQUE variables locales:
-	//nbRacines -> nombre de racine (de neoud) de la base de donnée
+	//nbRacines -> nombre de racine au début du fichier
 	//nbEltsPref -> nombre d'élement totale du fichier (taille max du tableau de donnée)
-	//tabEltPref -> tableau des élément contenue dans le fichier
+	//tabEltPref -> tableau des élément contenus dans le fichier
 	//buffer -> emplacement d'écriture
 	//file -> buffer ouvert en mode écriture
 }
 
 TEST(pref2lvlh1_exTP) {//TEST création d'un arbre
-	int nbRacines = 0; //nombre de racine
-	int nbEltsPref = 0; //nombre d'élément totale du fichier
-	eltPrefPostFixee_t tabEltPref[NB_ELTPREF_MAX]; //tableau des éléments
-	cell_lvlh_t *racine = NULL; //initialisation de l'arbre
+	int nbRacines = 0; //initialisation nombre de racine
+	int nbEltsPref = 0; //initialisation nombre totale d'élément dans le fichier
+	eltPrefPostFixee_t tabEltPref[NB_ELTPREF_MAX]; //initialisation tableau des éléments
+	cell_lvlh_t *racine = NULL; //initialisation du pointeur de l'arbre
 	
 	char buffer[1024]; //espace d'écriture
 	FILE * file = fmemopen(buffer, 1024, "w");//ouverture de l'espace en mode écriture
@@ -100,9 +100,9 @@ TEST(pref2lvlh1_exTP) {//TEST création d'un arbre
 	printf("\033[35m\npref2lvlh1_exTP :");//affichage de la source
 	printf("\033[0m\n");
 
-	nbRacines = lirePref_fromFileName("../pref_exTP.txt", tabEltPref, &nbEltsPref);//récupération des donnée sous forme de tableau
+	nbRacines = lirePref_fromFileName("../pref_exTP.txt", tabEltPref, &nbEltsPref);//récuperation du nombre de racine
 
-	racine=pref2lvlh(tabEltPref,nbRacines);//création de l'arbre
+	racine=pref2lvlh(tabEltPref,nbRacines);//création de l'arbre et récupération de l'adresse de la première racine
 
 	//VERIFICATIONS :
 	CHECK(racine->val == 'A'); //la racine a bien pour valeur A ?
@@ -120,13 +120,13 @@ TEST(pref2lvlh1_exTP) {//TEST création d'un arbre
 	CHECK(racine->lh->lv->lv->lh->lh->val == 'T');//le frere du frere du fils du fils du frere de la racine a bien pour valeur T ?
 	CHECK(racine->lh->lv->lh->val == 'I'); //le frere du fils du frere de la racine a bien pour valeur I ?
 
-	libererArbre(&racine);//liberartion de l'arbre
+	libererArbre(&racine);//liberartion de l'espace memoire de l'arbre
 	fclose(file);//fermeture du fichier
 
 	//LEXIQUE variables locales:
-	//nbRacines -> nombre de racine (de neoud) de la base de donnée
+	//nbRacines -> nombre de racine au début du fichier
 	//nbEltsPref -> nombre d'élement totale du fichier (taille max du tableau de donnée)
-	//tabEltPref -> tableau des élément contenue dans le fichier
+	//tabEltPref -> tableau des éléments contenus dans le fichier
 	//racine -> adresse premier element de l'arbre
 	//buffer -> emplacement d'écriture
 	//file -> buffer ouvert en mode écriture
