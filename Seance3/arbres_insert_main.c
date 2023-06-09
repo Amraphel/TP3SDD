@@ -47,7 +47,12 @@ TEST(rechercher_v) {
 	REQUIRE( NULL != pere );
 	CHECK( 'A' == pere->val );
 
-// autres tests a ajouter
+	pere = rechercher_v(racine, 'Z');   // valeur qui n'existe pas
+	CHECK( NULL == pere );
+
+	pere = rechercher_v(racine, 'J');   // valeur du dernier fils de B
+	REQUIRE( NULL != pere );
+	CHECK( 'J' == pere->val );
 
 	libererArbre(&racine);
 }
@@ -69,11 +74,21 @@ TEST(rechercherPrecFilsTries) {
 	REQUIRE( NULL != pere );
 	CHECK( 'F' == pere->val );
 
+	pprec = rechercherPrecFilsTries(pere, 'L');
+	REQUIRE( NULL != *pprec );
+	CHECK( 'M' == (*pprec)->val );
+
 	pprec = rechercherPrecFilsTries(pere, 'A');
 	REQUIRE( NULL != *pprec );
 	CHECK( 'K' == (*pprec)->val );
 
-// autres tests a ajouter
+	pprec = rechercherPrecFilsTries(pere, 'Z');
+	CHECK( NULL == (*pprec));
+
+	pere = rechercher_v(racine, 'C');
+	pprec = rechercherPrecFilsTries(pere, 'F');
+	REQUIRE( NULL != *pprec );
+	CHECK( 'I' == (*pprec)->val );
 
 	libererArbre(&racine);
 }
@@ -89,33 +104,39 @@ TEST(insererTrie) {
 	nbRacines = lirePref_fromFileName("../pref_exTP.txt", tabEltPref, &nbEltsPref);
 	racine = pref2lvlh(tabEltPref, nbRacines);
 
-	insererTrie(racine,'A','C');
-	printf("\033[34mPremiere Insertion : C dans A");
+	printf("\033[34mPremiere Insertion : B dans A");
 	printf("\033[0m\n");
-	CHECK('B' == racine->lv->val);
-	CHECK('C' == racine->lv->lh->val);
-	CHECK('D' == racine->lv->lh->lh->val);
-
-	printf("\033[34mDeuxieme Insertion : B dans A");
-	printf("\033[0m\n");
-	insererTrie(racine, 'A', 'B');
+	insererTrie(racine,'A','B');
 	CHECK('B' == racine->lv->val);
 	CHECK('B' == racine->lv->lh->val);
-	CHECK('C' == racine->lv->lh->lh->val);
+	CHECK('D' == racine->lv->lh->lh->val);
 
-	printf("\033[34mTroisieme Insertion : I dans F");
+	printf("\033[34mDeuxieme Insertion : A dans A");
 	printf("\033[0m\n");
-	insererTrie(racine, 'F', 'I');
+	insererTrie(racine, 'A', 'A');
+	CHECK('A' == racine->lv->val);
+	CHECK('B' == racine->lv->lh->val);
+	CHECK('B' == racine->lv->lh->lh->val);
+	CHECK('D' == racine->lv->lh->lh->lh->val);
+
+	printf("\033[34mTroisieme Insertion : L dans F");
+	printf("\033[0m\n");
+	insererTrie(racine, 'F', 'L');
 	CHECK('F' == racine->lh->lv->val);
-	CHECK('I' == racine->lh->lv->lv->val);
-	CHECK('K' == racine->lh->lv->lv->lh->val);
+	CHECK('K' == racine->lh->lv->lv->val);
+	CHECK('L' == racine->lh->lv->lv->lh->val);
+	CHECK('M' == racine->lh->lv->lv->lh->lh->val);
+	CHECK('T' == racine->lh->lv->lv->lh->lh->lh->val);
 	
-	// printf("\033[34mQuatrieme Insertion : Z dans C");
-	// printf("\033[0m\n");
-	// insererTrie(racine, 'C', 'Z');
-	// CHECK('F' == racine->lh->lv->val);
-	// CHECK('I' == racine->lh->lv->lh->val);
-	// CHECK('Z' == racine->lh->lv->lh->lh->val);
+	printf("\033[34mQuatrieme Insertion : Z dans F");
+	printf("\033[0m\n");
+	insererTrie(racine, 'F', 'Z');
+	CHECK('F' == racine->lh->lv->val);
+	CHECK('K' == racine->lh->lv->lv->val);
+	CHECK('L' == racine->lh->lv->lv->lh->val);
+	CHECK('M' == racine->lh->lv->lv->lh->lh->val);
+	CHECK('T' == racine->lh->lv->lv->lh->lh->lh->val);
+	CHECK('Z' == racine->lh->lv->lv->lh->lh->lh->lh->val);
 
 
 	libererArbre(&racine);

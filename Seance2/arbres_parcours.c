@@ -52,8 +52,8 @@ void printPostfixee(FILE* file, cell_lvlh_t * racine)
         if((*cour)->lv!=NULL)//possède un fils 
         {   
             //initialisation des valeurs de l'element de la pile
-            eltPile.adrCell = NULL;
-            eltPile.adrPrec = cour;
+            eltPile.adrCell = *cour;
+            eltPile.adrPrec = NULL;
             eltPile.nbFils_ou_Freres = getNbFils_ou_Freres((*cour)->lv); //recuperation du nombre de frère
             empiler(pile, &eltPile, &code);//sauvegarde des données de cet element
             cour = &(*cour)->lv;//déplacement du pointeur courant verticalement
@@ -70,7 +70,7 @@ void printPostfixee(FILE* file, cell_lvlh_t * racine)
                 {
                     fprintf(file, "(%c,%d) ", (*cour)->val, getNbFils_ou_Freres((*cour)->lv));//écriture dans le fichier le couple
                     depiler(pile, &eltPile, &code);//supprime les données de l'élément de la pile
-                    cour = eltPile.adrPrec;//cour devient pointe sur l'élement supprimer
+                    cour = &eltPile.adrCell;//cour devient pointe sur l'élement supprimer
                     
                 }
                 fprintf(file, "(%c,%d) ", (*cour)->val, eltPile.nbFils_ou_Freres);//écriture dans le fichier le couple
