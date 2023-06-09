@@ -86,8 +86,11 @@ int insererTrie(cell_lvlh_t * racine, char v, char w)
         cell_lvlh_t* nouv = allocPoint(w);
         if(nouv != NULL)
         {
-            nouv->lh = (*pprec);
+            if(pprec){
+                nouv->lh = (*pprec);
+            }
             (*pprec)=nouv;
+            fprintf(stderr,"val : %c\n",(*pprec)->val );
             code_retour = 1; 
         }
     }
