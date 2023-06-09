@@ -21,22 +21,22 @@ int lirePref_fromFileName(char * fileName, eltPrefPostFixee_t* tabEltPref , int*
     int nbRacine = 0; // entier représentant le nombre de racine
     char c ;          // caractère indiquateur de fin de fichier et utilisé pour surpprimer les espaces entre les couples
     
-    if(tabEltPref && nbEltsPref){ //tableau des éléments et adresse mémoire du nombre d'élément non vide
+    if(tabEltPref && nbEltsPref){ //tableau des éléments et adresses mémoires du nombre d'éléments non vide
         FILE * file = fopen(fileName, "r"); // ouverture du fichier
         *nbEltsPref = 0; //initialisation à 0 élément
 
         if(file) //vérification si le fichier est bien ouvert
         {
-            fscanf(file,"%d", &nbRacine); //récupération le nombre d'arbre différent
+            fscanf(file,"%d", &nbRacine); //récupération le nombre d'arbres différents
             c = fgetc(file); // déplacement d'un dans le fichier
-            // déplacement dans tous le fichier
+            // déplacement dans tout le fichier
             while(c == ' ') 
             {
-                //récupération des information du fichier sous forme de couple et suppression des espaces 
+                //récupération des informations du fichier sous forme de couples et suppression des espaces 
                 //stockage des valeurs dans un tableau 
                 fscanf(file, "%c %d", &tabEltPref[*nbEltsPref].val, &tabEltPref[*nbEltsPref].nbFils);
-                *nbEltsPref +=1; //augmentation du nombre d'élement à chaque passage
-                c = fgetc(file); //déplacement d'un dans le fichier
+                *nbEltsPref +=1; //augmentation du nombre d'élements à chaque passage
+                c = fgetc(file); //déplacement d'un espace dans le fichier
             }
             fclose(file); //fermeture du fichier
         }
@@ -45,7 +45,7 @@ int lirePref_fromFileName(char * fileName, eltPrefPostFixee_t* tabEltPref , int*
 
 
     //LEXIQUE variables locales:
-    // nbRacine -> nombre de recine
+    // nbRacine -> nombre de racines
     // c -> permet le déplacement dans le fichier (indicateur de fin de fichier)
 }
 
@@ -59,7 +59,7 @@ void printTabEltPref(FILE *file, eltPrefPostFixee_t *tabEltPref, int nbEltsPref)
 {
     int ind; //indice d'itération
     for(ind=0; ind<nbEltsPref; ind++){ //pour tous les élements
-        fprintf(file, " (%c,%d)", tabEltPref[ind].val, tabEltPref[ind].nbFils); //écriture dans un fichier tous les éléments
+        fprintf(file, " (%c,%d)", tabEltPref[ind].val, tabEltPref[ind].nbFils); //écriture dans un fichier sous forme de couple
     }
     fprintf(file,"\n");//retour à la ligne
 
@@ -75,7 +75,7 @@ void printTabEltPref(FILE *file, eltPrefPostFixee_t *tabEltPref, int nbEltsPref)
 cell_lvlh_t *allocPoint(char val)
 {
     cell_lvlh_t *nouv = malloc(sizeof(cell_lvlh_t)); //allocation de mémoire
-    if(nouv) //allocation réussi
+    if(nouv) //allocation réussie
     {
         //initiation des valeurs du cell_lvlh alloué
         nouv->val = val;
@@ -100,17 +100,17 @@ cell_lvlh_t* pref2lvlh(eltPrefPostFixee_t * tabEltPref,int nbRacines)
 {
     int code=0; // code pour la fonction empiler
     cell_lvlh_t* nouv = NULL; // nouvelle cellule
-    eltType eltPile; // contenue d'un élément de la pile
+    eltType eltPile; // contenu d'un élément de la pile
 
     cell_lvlh_t* adrTete=NULL; // adresse du premier element
-    cell_lvlh_t** pprec=&adrTete; // pointeur précédant
+    cell_lvlh_t** pprec=&adrTete; // pointeur précédent
 
     pile_t * pile = initPile(PILE_SZ); // pile
     eltPrefPostFixee_t * courLc=tabEltPref; // pointeur courant liste continue (tableau) 
     int NB_fils_ou_frere= nbRacines; // nombre de fils et/ou de frère
 
 
-    while (NB_fils_ou_frere>0 || !estVidePile(pile)) // tant que le nombre de fils ou de frère est supérieur à 0 ou que la pile n'est pas vide
+    while (NB_fils_ou_frere>0 || !estVidePile(pile)) // tant que l'on n'a pas tout parcouru 
     {
         
         if(NB_fils_ou_frere>0){ //nombre de frère > 0
@@ -127,7 +127,7 @@ cell_lvlh_t* pref2lvlh(eltPrefPostFixee_t * tabEltPref,int nbRacines)
             courLc= courLc+1; //avancement du pointeur courant dans le tableau
 
         }else{ //nombre de frère <= 0
-            if(!estVidePile(pile)){ //tant que la pile n'est pas vide
+            if(!estVidePile(pile)){ //s'il reste des elements empiles
                 depiler(pile,&eltPile,&code); //supprime l'element de la pile
                 pprec=eltPile.adrPrec; // déplacement de pprec
                 NB_fils_ou_frere=eltPile.nbFils_ou_Freres; //mise a jour du nombre de fils ou de frere
@@ -139,14 +139,14 @@ cell_lvlh_t* pref2lvlh(eltPrefPostFixee_t * tabEltPref,int nbRacines)
     return adrTete; // retourne l'adresse de l'arbre
 
     //LEXIQUE variable locale :
-    // code -> permet de savoir si la fonction empiler/dépiler à bien marché
+    // code -> permet de savoir si la fonction empiler/dépiler à bien marche
     // nouv -> nouvelle cellule
-    // eltPile -> contenue d'un élément de la pile
+    // eltPile -> contenue d'un element de la pile
     // adrTete -> adresse du premier element
-    // pprec -> pointeur précédant de l'élément courant (pointeur courLc)
-    // pile -> pile pour sauvegarder les déplacements dans l'arbre
+    // pprec -> pointeur precedant de l'element courant (pointeur courLc)
+    // pile -> pile pour sauvegarder les deplacements dans l'arbre
     // courLc -> pointeur courant liste continue (tableau) 
-    // NB_fils_ou_frere -> nombre de fils ou de frère totale
+    // NB_fils_ou_frere -> nombre de fils ou de frere total
 
 }
 
@@ -162,11 +162,11 @@ void libererArbre(cell_lvlh_t** adrPtRacine)
             libererArbre(&(*adrPtRacine)->lv);//libère l'espace mémoire du fils
         }
         if((*adrPtRacine)->lh){//possède un frère
-            libererArbre(&(*adrPtRacine)->lh);//libère l'espace mémoire du frère
+            libererArbre(&(*adrPtRacine)->lh);//libère l'espace mémoire du frere
         }
         free(*adrPtRacine);//libère l'espace mémoire de la racine
 
-        *adrPtRacine=NULL;//mis à null car mémoire de la racine libérer
+        *adrPtRacine=NULL;//mis à null car la mémoire de la racine est liberee 
     }
 
 }

@@ -19,7 +19,7 @@ TEST(nouvCell) {//TEST création d'une cellule
 
 	new = allocPoint('A'); //créer la cellule de valeur A
 	//VERIFICATIONS :
-	REQUIRE( NULL != new );  //new est bien créer ?
+	REQUIRE( NULL != new );  //new est bien créee ?
 	CHECK( 'A' == new->val ); //valeur de new = A ?
 	CHECK( NULL == new->lv ); //new n'a pas de fils ?
 	CHECK( NULL == new->lh ); //new n'a pas de frère ?
@@ -31,7 +31,7 @@ TEST(nouvCell) {//TEST création d'une cellule
 }
 
 
-TEST(getNbFils_ou_Freres) {
+TEST(getNbFils_ou_Freres) {//TEST recuperation du nombre de frere
 	int nbRacines = 0; //nombre de racine
 	int nbEltsPref = 0; //nombre des éléments de la table 
 	eltPrefPostFixee_t tabEltPref[NB_ELTPREF_MAX]; //tableau des éléments 
@@ -60,22 +60,22 @@ TEST(getNbFils_ou_Freres) {
 	CHECK( 0 == getNbFils_ou_Freres(racine->lv->lh->lv) ); //le frere du fils de la racine à 0 fils ?
 
 	REQUIRE( NULL != racine->lv->lh->lh );//le frere du frere du fils de la racinne n'est pas null ?
-	CHECK( 1 == getNbFils_ou_Freres(racine->lv->lh->lh->lv) ); // le frère du frère du fiils de la racine à 1 fils ?
+	CHECK( 1 == getNbFils_ou_Freres(racine->lv->lh->lh->lv) ); // le frère du frère du fils de la racine à 1 fils ?
 
 	fclose(file);//fermeture du fichier
 	libererArbre(&racine);// libération de la place mémoire de l'arbre
 
 	// LEXIQUE variables locales:
-	// nbRacines -> nombre de racine (de neoud) de la base de donnée
+	// nbRacines -> nombre de racine (de noeud) de la base de donnée
 	// nbEltsPref -> nombre d'élement totale du fichier (taille max du tableau de donnée)
-	// tabEltPref -> tableau des élément contenue dans le fichier
+	// tabEltPref -> tableau des éléments contenus dans le fichier
 	// buffer -> emplacement d'écriture
 	// file -> buffer ouvert en mode écriture
 	// racine -> racine de l'arbre
 }
 
-TEST(printPostfixee) {
-	int nbRacines = 0; //nombre de racine
+TEST(printPostfixee) {//TEST de l'affichage sous forme postifixee
+	int nbRacines = 0; //nombre de racines
 	int nbEltsPref = 0; //nombre des éléments de la table 
 	eltPrefPostFixee_t tabEltPref[NB_ELTPREF_MAX]; //tableau des éléments
 	cell_lvlh_t *racine = NULL; //initialisation de la racine
@@ -87,7 +87,7 @@ TEST(printPostfixee) {
 	printf("\033[35m\nprintPostFixee :");
 	printf("\033[0m\n");
 
-	nbRacines = lirePref_fromFileName("../pref_exTP.txt", tabEltPref, &nbEltsPref); //récuperation du nombre de racine
+	nbRacines = lirePref_fromFileName("../pref_exTP.txt", tabEltPref, &nbEltsPref); //recuperation du nombre de racines
 	racine = pref2lvlh(tabEltPref, nbRacines); //récupération de l'adresse de la racine de l'arbre
 	printPostfixee(file, racine); //écriture sur le buffer les données de l'arbre
 	fclose(file); //fermeture du fichier
