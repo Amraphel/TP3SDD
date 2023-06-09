@@ -100,9 +100,9 @@ TEST(pref2lvlh1_exTP) {//TEST création d'un arbre
 	printf("\033[35m\npref2lvlh1_exTP :");//affichage de la source
 	printf("\033[0m\n");
 
-	nbRacines = lirePref_fromFileName("../pref_exTP.txt", tabEltPref, nbEltsPref);//récupération des donnée sous forme de tableau
+	nbRacines = lirePref_fromFileName("../pref_exTP.txt", tabEltPref, &nbEltsPref);//récupération des donnée sous forme de tableau
 
-	racine=pref2lvlh(tabEltPref,&nbRacines);//création de l'arbre
+	racine=pref2lvlh(tabEltPref,nbRacines);//création de l'arbre
 
 	//VERIFICATIONS :
 	CHECK(racine->val == 'A'); //la racine a bien pour valeur A ?
@@ -111,7 +111,7 @@ TEST(pref2lvlh1_exTP) {//TEST création d'un arbre
 	CHECK(racine->lv->lv->lh->val == 'J'); //le frère du fils du fils de la racine a bien pour valeur J ?
 	CHECK(racine->lv->lh->val == 'D'); //le frere du fils de la racine a bien pour valeur D ?
 	CHECK(racine->lv->lh->lh->val == 'H'); //le frere du frere du fils de la racine a bien pour valeur H ?
-	CHECK(racine->lv->lh->lh->lh == NULL); //le frere du frere du fils de la racine a pas de frere ?
+	CHECK(racine->lv->lh->lh->lh == NULL); //le frere du frere du frere du fils de la racine n'existe pas ?
 	CHECK(racine->lv->lh->lh->lv->val == 'G'); //le fils du frere du frere du fils de la racine a bien pour valeur G ?
 	CHECK(racine->lh->val == 'C'); // le frere de la racine a bien pour valeur C ?
 	CHECK(racine->lh->lv->val == 'F'); //le fils du frère de la racine a bien pour valeur F ?

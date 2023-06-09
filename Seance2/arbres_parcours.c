@@ -17,11 +17,11 @@
  */
 int getNbFils_ou_Freres( cell_lvlh_t * ptCell)
 {
-    int NB_fils_ou_frere = 0; //initialisation nombre de fils ou frère
+    int NB_fils_ou_frere = 0; //initialisation nombre de fils ou frères
     if (ptCell != NULL) //pointeur non null
     {
-        NB_fils_ou_frere = 1; //car il existe
-        cell_lvlh_t * cour = ptCell;//pointeur courant
+        NB_fils_ou_frere = 1; //car il est lui meme un frere
+        cell_lvlh_t * cour = ptCell;//pointeur courant de parcours
         while (cour->lh != NULL)//possède un frère ?
         {
             NB_fils_ou_frere += 1;//incrémentation pour chaque frère
@@ -44,10 +44,10 @@ int getNbFils_ou_Freres( cell_lvlh_t * ptCell)
 void printPostfixee(FILE* file, cell_lvlh_t * racine)
 {
     int code=0; //code pour l'empilement et le dépilement 
-    cell_lvlh_t ** cour = &racine; //double pointeur couran
-    pile_t* pile = initPile(NB_ELTPREF_MAX); //pile
+    cell_lvlh_t ** cour = &racine; //on fait pointer cour sur la racine
+    pile_t* pile = initPile(NB_ELTPREF_MAX); //initialisation de la pile
     eltType eltPile; //element de la pile
-    while( (*cour) != NULL || !estVidePile(pile)) //pointeur courant nonn null et la pile n'est pas vide
+    while( (*cour) != NULL || !estVidePile(pile)) //pointeur courant non null et la pile n'est pas vide
     {
         if((*cour)->lv!=NULL)//possède un fils 
         {   
@@ -66,15 +66,15 @@ void printPostfixee(FILE* file, cell_lvlh_t * racine)
             }
             else //ne possède pas de fils 
             {
-                while(((*cour)->lh == NULL) && !estVidePile(pile) ) //pointeur courant non null et la pile non vide
+                while(((*cour)->lh == NULL) && !estVidePile(pile) ) //tant que l'on a pas parcouru l'integralite de l'arbre
                 {
                     fprintf(file, "(%c,%d) ", (*cour)->val, getNbFils_ou_Freres((*cour)->lv));//écriture dans le fichier le couple
                     depiler(pile, &eltPile, &code);//supprime les données de l'élément de la pile
-                    cour = &eltPile.adrCell;//cour devient pointe sur l'élement supprimer
+                    cour = &eltPile.adrCell;//on fait pointer cour sur l'element depile
                     
                 }
                 fprintf(file, "(%c,%d) ", (*cour)->val, eltPile.nbFils_ou_Freres);//écriture dans le fichier le couple
-                cour = &(*cour)->lh;// deplacement horizontale de cour
+                cour = &(*cour)->lh;// deplacement horizontal de cour
             }
         }
     }
