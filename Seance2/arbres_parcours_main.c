@@ -14,77 +14,94 @@
 
 BEGIN_TEST_GROUP(ARBRE_PARCOURS)
 
-TEST(nouvCell) {
-	cell_lvlh_t *new;
+TEST(nouvCell) {//TEST création d'une cellule
+	cell_lvlh_t *new; //initialisation de la cellule
 
-	new = allocPoint('A');
-	REQUIRE( NULL != new ); 
-	CHECK( 'A' == new->val );
-	CHECK( NULL == new->lv );
-	CHECK( NULL == new->lh );
+	new = allocPoint('A'); //créer la cellule de valeur A
+	//VERIFICATIONS :
+	REQUIRE( NULL != new );  //new est bien créer ?
+	CHECK( 'A' == new->val ); //valeur de new = A ?
+	CHECK( NULL == new->lv ); //new n'a pas de fils ?
+	CHECK( NULL == new->lh ); //new n'a pas de frère ?
 
-	free(new);
+	free(new);//libération de la place mémoire de new
+
+	//LEXIQUE variable locale:
+	// new -> nouvelle cellule
 }
 
 
 TEST(getNbFils_ou_Freres) {
-	int nbRacines = 0;
-	int nbEltsPref = 0;
-	eltPrefPostFixee_t tabEltPref[NB_ELTPREF_MAX];
-	cell_lvlh_t *racine = NULL;
+	int nbRacines = 0; //nombre de racine
+	int nbEltsPref = 0; //nombre des éléments de la table 
+	eltPrefPostFixee_t tabEltPref[NB_ELTPREF_MAX]; //tableau des éléments 
+	cell_lvlh_t *racine = NULL; //racine de l'arbre
 	
-	char buffer[1024];
-	FILE * file = fmemopen(buffer, 1024, "w");
+	char buffer[1024]; //espace d'écriture
+	FILE * file = fmemopen(buffer, 1024, "w"); //ouverture du buffer en écriture
 	REQUIRE ( NULL != file);
 
 	printf("\033[35m\ngetNbFils_ou_Freres :");
 	printf("\033[0m\n");
 
-	nbRacines = lirePref_fromFileName("../pref_exTP.txt", tabEltPref, &nbEltsPref);
-	racine = pref2lvlh(tabEltPref, nbRacines);
+	nbRacines = lirePref_fromFileName("../pref_exTP.txt", tabEltPref, &nbEltsPref); //récuperation du nombre de racine
+	racine = pref2lvlh(tabEltPref, nbRacines); //récupération de l'adresse de la racine de l'arbre
 
-	REQUIRE( NULL != racine );
-//	printf("A = %c\n", racine->val);
-	CHECK( 2 == getNbFils_ou_Freres(racine) );     // 2 freres y compris lui-meme
-	CHECK( 3 == getNbFils_ou_Freres(racine->lv) ); // 3 fils
+	//VERIFICATIONS : 
+	REQUIRE( NULL != racine ); // la racine n'est pas null ?
+	CHECK( 2 == getNbFils_ou_Freres(racine) ); // la racine à 2 freres y compris lui-meme ?
+	CHECK( 3 == getNbFils_ou_Freres(racine->lv) ); // la racine à 3 fils ?
 
-	REQUIRE( NULL != racine->lv );
-//	printf("B = %c\n", racine->lv->val);
-	CHECK( 3 == getNbFils_ou_Freres(racine->lv) );     // 3 freres y compris lui-meme
-	CHECK( 2 == getNbFils_ou_Freres(racine->lv->lv) ); // 2 fils
+	REQUIRE( NULL != racine->lv ); //le fils de la racine n'est pas null
+	CHECK( 3 == getNbFils_ou_Freres(racine->lv) );     // le fils de la racine à 3 freres y compris lui-meme ?
+	CHECK( 2 == getNbFils_ou_Freres(racine->lv->lv) ); // le fils de la racine à 2 fils ?
 
-	REQUIRE( NULL != racine->lv->lh );
-//	printf("D = %c\n", racine->lv->lh->val);
-	CHECK( 0 == getNbFils_ou_Freres(racine->lv->lh->lv) ); // 0 fils
+	REQUIRE( NULL != racine->lv->lh ); //le frere du fils de la racine existe ?
+	CHECK( 0 == getNbFils_ou_Freres(racine->lv->lh->lv) ); //le frere du fils de la racine à 0 fils ?
 
-	REQUIRE( NULL != racine->lv->lh->lh );
-//	printf("H = %c\n", racine->lv->lh->lh->val);
-	CHECK( 1 == getNbFils_ou_Freres(racine->lv->lh->lh->lv) ); // 1 fils
+	REQUIRE( NULL != racine->lv->lh->lh );//le frere du frere du fils de la racinne n'est pas null ?
+	CHECK( 1 == getNbFils_ou_Freres(racine->lv->lh->lh->lv) ); // le frère du frère du fiils de la racine à 1 fils ?
 
-	fclose(file);
-	libererArbre(&racine);
+	fclose(file);//fermeture du fichier
+	libererArbre(&racine);// libération de la place mémoire de l'arbre
+
+	// LEXIQUE variables locales:
+	// nbRacines -> nombre de racine (de neoud) de la base de donnée
+	// nbEltsPref -> nombre d'élement totale du fichier (taille max du tableau de donnée)
+	// tabEltPref -> tableau des élément contenue dans le fichier
+	// buffer -> emplacement d'écriture
+	// file -> buffer ouvert en mode écriture
+	// racine -> racine de l'arbre
 }
 
 TEST(printPostfixee) {
-	int nbRacines = 0;
-	int nbEltsPref = 0;
-	eltPrefPostFixee_t tabEltPref[NB_ELTPREF_MAX];
-	cell_lvlh_t *racine = NULL;
+	int nbRacines = 0; //nombre de racine
+	int nbEltsPref = 0; //nombre des éléments de la table 
+	eltPrefPostFixee_t tabEltPref[NB_ELTPREF_MAX]; //tableau des éléments
+	cell_lvlh_t *racine = NULL; //initialisation de la racine
 	
-	char buffer[1024];
-	FILE * file = fmemopen(buffer, 1024, "w");
-	REQUIRE ( NULL != file);
+	char buffer[1024]; //espace d'écriture
+	FILE * file = fmemopen(buffer, 1024, "w"); //ouverture du buffer en mode écriture
+	REQUIRE ( NULL != file);// vérification que le fichier est bien ouvert 
 
 	printf("\033[35m\nprintPostFixee :");
 	printf("\033[0m\n");
 
-	nbRacines = lirePref_fromFileName("../pref_exTP.txt", tabEltPref, &nbEltsPref);
-	racine = pref2lvlh(tabEltPref, nbRacines);
-	printPostfixee(file, racine);
-	fclose(file);
-	CHECK( 0 == strcmp(buffer,"(E,0) (J,0) (B,2) (D,0) (G,0) (H,1) (A,3) (K,0) (M,0) (T,0) (F,3) (I,0) (C,2) 2\n") );
+	nbRacines = lirePref_fromFileName("../pref_exTP.txt", tabEltPref, &nbEltsPref); //récuperation du nombre de racine
+	racine = pref2lvlh(tabEltPref, nbRacines); //récupération de l'adresse de la racine de l'arbre
+	printPostfixee(file, racine); //écriture sur le buffer les données de l'arbre
+	fclose(file); //fermeture du fichier
+	CHECK( 0 == strcmp(buffer,"(E,0) (J,0) (B,2) (D,0) (G,0) (H,1) (A,3) (K,0) (M,0) (T,0) (F,3) (I,0) (C,2) 2\n") ); //comparaison des résultats
 	
-	libererArbre(&racine);
+	libererArbre(&racine); //liberation de l'espace mémoire de l'arbre
+
+	//LEXIQUE varibles locales :
+	// nbRacines -> nombre de racine (de neoud) de la base de donnée
+	// nbEltsPref -> nombre d'élement totale du fichier (taille max du tableau de donnée)
+	// tabEltPref -> tableau des élément contenue dans le fichier
+	// buffer -> emplacement d'écriture
+	// file -> buffer ouvert en mode écriture
+	// racine -> racine de l'arbre
 }
 
 

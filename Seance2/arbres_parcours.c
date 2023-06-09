@@ -87,3 +87,5 @@ void printPostfixee(FILE* file, cell_lvlh_t * racine)
     // pile -> pile pour stocker les éléments pile et se déplacer correctemant dans l'arbre
     // eltPile -> élément de la pile 
 }
+
+

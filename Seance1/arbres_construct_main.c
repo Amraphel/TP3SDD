@@ -95,7 +95,7 @@ TEST(pref2lvlh1_exTP) {//TEST création d'un arbre
 	
 	char buffer[1024]; //espace d'écriture
 	FILE * file = fmemopen(buffer, 1024, "w");//ouverture de l'espace en mode écriture
-	REQUIRE ( NULL != file); //vérification que le ficheir est bien ouvert
+	REQUIRE ( NULL != file); //vérification que le fichier est bien ouvert
 
 	printf("\033[35m\npref2lvlh1_exTP :");//affichage de la source
 	printf("\033[0m\n");
@@ -123,7 +123,6 @@ TEST(pref2lvlh1_exTP) {//TEST création d'un arbre
 	libererArbre(&racine);//liberartion de l'arbre
 	fclose(file);//fermeture du fichier
 
-	//LEXIQUE variables locales:
 	//LEXIQUE variables locales:
 	//nbRacines -> nombre de racine (de neoud) de la base de donnée
 	//nbEltsPref -> nombre d'élement totale du fichier (taille max du tableau de donnée)
