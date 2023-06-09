@@ -16,16 +16,16 @@
  *   - nbFils_ou_Freres : le nombre de fils ou freres d'un point 
  */
 typedef struct eltype {
-    cell_lvlh_t * adrCell;
-    cell_lvlh_t ** adrPrec;
-    int nbFils_ou_Freres;
+    cell_lvlh_t * adrCell; //adresse de la cellule
+    cell_lvlh_t ** adrPrec; //adresse de la cellule precedante
+    int nbFils_ou_Freres; //nombre de fils ou de frere
 } eltType;
 
 
 /** TO DO
  * @brief Copier la valeur d'un element dans un autre emplacement
- * @param [in] xxx l'adresse de l'element a copier
- * @param [in] xxx l'adresse de la destination
+ * @param [in] source l'adresse de l'element a copier
+ * @param [in] dest l'adresse de la destination
  */
 void copyElt(eltType* source, eltType* dest);
 
