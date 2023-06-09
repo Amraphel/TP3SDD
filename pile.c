@@ -71,7 +71,7 @@ void empiler(pile_t * ptPile, eltType * ptVal, int * code)
 {
     if (ptPile->taille-1 > ptPile->sommet) //si la pile est assez grande pour accueillir un nouvel élément
     {
-        ptPile->sommet++; //On augment le sommet
+        ptPile->sommet++; //On augmente le sommet
         copyElt(ptVal, &(ptPile->base[ptPile->sommet])); // On insere l'élément
         *code = 0;
     }
