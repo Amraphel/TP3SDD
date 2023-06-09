@@ -14,22 +14,26 @@
 
 BEGIN_TEST_GROUP(ARBRE_INSERT)
 
-TEST(nouvCell) {
-	cell_lvlh_t *new;
+TEST(nouvCell) {//TEST création d'une cellule
+	cell_lvlh_t *new; //initialisation de la cellule
 
-	new = allocPoint('A');
-	REQUIRE( NULL != new ); 
-	CHECK( 'A' == new->val );
-	CHECK( NULL == new->lv );
-	CHECK( NULL == new->lh );
+	new = allocPoint('A'); //créer la cellule de valeur A
+	//VERIFICATIONS :
+	REQUIRE( NULL != new );  //new est bien créee ?
+	CHECK( 'A' == new->val ); //valeur de new = A ?
+	CHECK( NULL == new->lv ); //new n'a pas de fils ?
+	CHECK( NULL == new->lh ); //new n'a pas de frère ?
 
-	free(new);
+	free(new);//libération de la place mémoire de new
+
+	//LEXIQUE variable locale:
+	// new -> nouvelle cellule
 }
 
 
-TEST(rechercher_v) {
-	int nbRacines = 0;
-	int nbEltsPref = 0;
+TEST(rechercher_v) {//TEST recherche valeur 
+	int nbRacines = 0; // initialisation nombre de racine
+	int nbEltsPref = 0; // initialisation
 	eltPrefPostFixee_t tabEltPref[NB_ELTPREF_MAX];
 	cell_lvlh_t *racine = NULL;
 	cell_lvlh_t *pere = NULL;
