@@ -23,7 +23,7 @@ cell_lvlh_t * rechercher_v(cell_lvlh_t * racine, char v)
 {
     cell_lvlh_t** cour = &racine; //initialisation du pointeur courant
     eltType eltPile; //initialisation d'un element de la pile
-    pile_t* pile = initPile(NB_ELTPREF_MAX); //initialisation de la pile
+    pile_t* pile = initPile(PILE_SZ); //initialisation de la pile
     int code=0; //code de retour des fonctions empiler et depiler
     while(((*cour) != NULL || !estVidePile(pile)) && (*cour)->val != v ) //tant que l'on a pas tout parcouru
     {
